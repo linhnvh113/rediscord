@@ -1,6 +1,6 @@
 import { type Server as NetServer } from "http";
 
-import { type NextApiRequest, type NextApiResponse } from "next";
+import { type NextApiRequest } from "next";
 import { Server as ServerIO } from "socket.io";
 
 import type { NextApiResponseSocket } from "@/types";
@@ -18,12 +18,6 @@ const ioHandler = (req: NextApiRequest, res: NextApiResponseSocket) => {
     const io = new ServerIO(httpServer, {
       path,
       addTrailingSlash: false,
-      cors: {
-        methods: ["GET", "POST"],
-        credentials: true,
-        transports: ["websocket", "polling"],
-      },
-      allowEIO3: true,
     });
 
     res.socket.server.io = io;
