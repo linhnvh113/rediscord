@@ -1,17 +1,10 @@
 import { auth } from "@clerk/nextjs/server";
 import { ChannelType } from "@prisma/client";
-import { ChevronDown } from "lucide-react";
 import { redirect } from "next/navigation";
 
 import ChannelNavHeader from "@/components/channel-nav/channel-nav-header";
-import ChannelNavItem from "@/components/channel-nav/channel-nav-item";
 import ChannelNavSearch from "@/components/channel-nav/channel-nav-search";
 import ChannelNavSection from "@/components/channel-nav/channel-nav-section";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { currentProfile } from "@/lib/current-profile";

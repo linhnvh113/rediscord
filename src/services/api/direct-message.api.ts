@@ -11,7 +11,7 @@ export type UpdateDirectMessageBody = {
 export const directMessageApi = {
   create: async (body: CreateDirectMessageBody) => {
     const res = await fetch("/api/socket/direct-messages", {
-      method: "post",
+      method: "POST",
       body: JSON.stringify(body),
       headers: {
         "Content-Type": "application/json",
@@ -23,7 +23,7 @@ export const directMessageApi = {
 
   update: async (body: UpdateDirectMessageBody) => {
     const res = await fetch(`/api/socket/direct-messages/${body.id}`, {
-      method: "patch",
+      method: "PATCH",
       body: JSON.stringify(body),
       headers: {
         "Content-Type": "application/json",
@@ -35,7 +35,7 @@ export const directMessageApi = {
 
   delete: async (id: string) => {
     await fetch(`/api/socket/direct-messages/${id}`, {
-      method: "delete",
+      method: "DELETE",
     });
   },
 };

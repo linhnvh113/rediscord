@@ -1,5 +1,6 @@
 "use client";
 
+import AttachmentForm from "@/components/forms/attachment-form";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -12,21 +13,21 @@ import {
 import { useModalStore } from "@/hooks/use-modal-store";
 
 export default function MessageFileModal() {
-  const { type, isOpen, data, onClose } = useModalStore();
+  const { type, isOpen, onClose } = useModalStore();
 
   const isModalOpen = isOpen && type === "MESSAGE_FILE";
 
   return (
-    <Dialog open={isModalOpen}>
+    <Dialog open={isModalOpen} onOpenChange={onClose}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Add an attachment</DialogTitle>
-          <DialogDescription>Send a file as a message</DialogDescription>
+          <DialogTitle>Đính kèm tệp</DialogTitle>
+          <DialogDescription>Gửi tập tin dưới dạng tin nhắn</DialogDescription>
         </DialogHeader>
-
+        <AttachmentForm />
         <DialogFooter>
-          <Button type="submit" form="server-form">
-            Send
+          <Button type="submit" form="attachment-form">
+            Gửi
           </Button>
         </DialogFooter>
       </DialogContent>

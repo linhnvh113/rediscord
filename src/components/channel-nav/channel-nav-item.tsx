@@ -2,7 +2,7 @@
 
 import type { MouseEvent } from "react";
 
-import { type Channel, MemberRole, type Server } from "@prisma/client";
+import { type Channel, MemberRole } from "@prisma/client";
 import { Edit, Lock, Trash } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
@@ -24,12 +24,10 @@ export default function ChannelNavItem({ channel, role }: ChannelNavItemProps) {
   const { onOpen } = useModalStore();
 
   const handleEditClick = (e: MouseEvent) => {
-    e.stopPropagation();
     onOpen("CHANNEL", { channel });
   };
 
   const handleDeleteClick = (e: MouseEvent) => {
-    e.stopPropagation();
     onOpen("DELETE_CHANNEL", { channel });
   };
 

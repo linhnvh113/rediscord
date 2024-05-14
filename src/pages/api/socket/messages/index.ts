@@ -1,24 +1,26 @@
-import type { NextApiRequest, NextApiResponse } from "next";
+import type { NextApiRequest } from "next";
 
 import { currentProfilePageRouter } from "@/lib/current-profile";
 import { db } from "@/lib/db";
+import type { NextApiResponseSocket } from "@/types";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse,
+  res: NextApiResponseSocket,
 ) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed." });
   }
 
   try {
-    /* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */
-    const { content, fileUrl, serverId, channelId } = req.body;
-
     const profile = await currentProfilePageRouter(req);
     if (!profile) {
       return res.status(400).json({ error: "Unauthorized" });
     }
+
+    /* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */
+    const { content, fileUrl } = req.body;
+    const { serverId, channelId } = req.query;
 
     if (!serverId) {
       return res.status(400).json({ error: "Server id is missing" });
@@ -85,9 +87,9 @@ export default async function handler(
       },
     });
 
-    const emitKey = `channelId:${channel.id}:messages`;
+    const emitKey = `chat:${channel.id}:messages`;
 
-    res?.socket?.server?.io?.emit(emitKey, message);
+    res.socket.server.io.emit(emitKey, message);
 
     return res.status(201).json(message);
   } catch (error) {

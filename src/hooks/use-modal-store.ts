@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-import type { Channel, Server } from "@/types";
+import type { Channel, DirectMessage, Message, Server } from "@/types";
 
 export type ModalType =
   | "SERVER"
@@ -15,6 +15,7 @@ export type ModalType =
 interface ModalData {
   server?: Server;
   channel?: Channel;
+  message?: Message | DirectMessage;
 }
 
 interface ModalStore {

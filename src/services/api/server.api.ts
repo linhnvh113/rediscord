@@ -9,28 +9,36 @@ export type UpdateServerBody = {
 
 export const serverApi = {
   create: async (body: CreateServerBody) => {
-    const response = await fetch("/api/servers", {
+    const res = await fetch("/api/servers", {
       method: "POST",
       body: JSON.stringify(body),
     });
 
-    return response.json();
+    return res.json();
   },
 
   update: async (body: UpdateServerBody) => {
-    const response = await fetch(`/api/server/${body.id}`, {
+    const res = await fetch(`/api/servers/${body.id}`, {
       method: "PATCH",
       body: JSON.stringify(body),
     });
 
-    return response.json();
+    return res.json();
+  },
+
+  delete: async (id: string) => {
+    const res = await fetch(`/api/servers/${id}`, {
+      method: "DELETE",
+    });
+
+    return res.json();
   },
 
   generateInviteCode: async (serverId: string) => {
-    const response = await fetch(`/api/servers/${serverId}/invite-code`, {
+    const res = await fetch(`/api/servers/${serverId}/invite-code`, {
       method: "PATCH",
     });
 
-    return response.json();
+    return res.json();
   },
 };

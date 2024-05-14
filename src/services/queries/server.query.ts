@@ -14,6 +14,12 @@ export const useUpdateServer = () => {
   });
 };
 
+export const useDeleteServer = () => {
+  return useMutation({
+    mutationFn: serverApi.delete,
+  });
+};
+
 export const useGenerateInviteCode = () => {
   return useMutation({
     mutationFn: serverApi.generateInviteCode,

@@ -12,8 +12,6 @@ export default function UserAvatar({
   className,
   ...props
 }: UserAvatarProps) {
-  // Implement your component logic and rendering here
-
   return (
     <Avatar className={cn("size-7 md:size-10", className)} {...props}>
       <AvatarImage src={src} />

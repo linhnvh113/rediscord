@@ -1,6 +1,7 @@
 import type { Message } from "@prisma/client";
 import { NextResponse } from "next/server";
 
+import { MESSAGES_BATCH } from "@/constants";
 import { currentProfile } from "@/lib/current-profile";
 import { db } from "@/lib/db";
 
@@ -26,7 +27,7 @@ export async function GET(req: Request) {
     let messages: Message[] = [];
     if (cursor) {
       messages = await db.message.findMany({
-        take: 10,
+        take: MESSAGES_BATCH,
         skip: 1,
         cursor: {
           id: cursor,
@@ -47,7 +48,7 @@ export async function GET(req: Request) {
       });
     } else {
       messages = await db.message.findMany({
-        take: 10,
+        take: MESSAGES_BATCH,
         where: {
           channelId,
         },
@@ -66,8 +67,8 @@ export async function GET(req: Request) {
 
     let nextCursor = null;
 
-    if (messages.length === 10) {
-      nextCursor = messages[10 - 1].id;
+    if (messages.length === MESSAGES_BATCH) {
+      nextCursor = messages[MESSAGES_BATCH - 1].id;
     }
 
     return NextResponse.json(

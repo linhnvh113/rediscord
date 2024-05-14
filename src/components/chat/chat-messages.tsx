@@ -6,6 +6,7 @@ import { Loader2 } from "lucide-react";
 
 import ChatItem from "@/components/chat/chat-item";
 import ChatWelcome from "@/components/chat/chat-welcome";
+import { Button } from "@/components/ui/button";
 import { useChatQuery } from "@/hooks/use-chat-query";
 import { useChatScroll } from "@/hooks/use-chat-scroll";
 import { useChatSocket } from "@/hooks/use-chat-socket";
@@ -31,9 +32,9 @@ export default function ChatMessages({
   const chatRef = useRef<ElementRef<"div">>(null);
   const bottomRef = useRef<ElementRef<"div">>(null);
 
-  const queryKey = `${paramKey}:${paramValue}`;
-  const addKey = `${paramKey}:${paramValue}:messages`;
-  const updateKey = `${paramKey}:${paramValue}:messages:update`;
+  const queryKey = `chat:${paramValue}`;
+  const addKey = `chat:${paramValue}:messages`;
+  const updateKey = `chat:${paramValue}:messages:update`;
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
     useChatQuery({
@@ -70,18 +71,19 @@ export default function ChatMessages({
           {isFetchingNextPage ? (
             <Loader2 className="my-4 size-6 animate-spin" />
           ) : (
-            <button onClick={() => fetchNextPage()}>
+            <Button variant="link" onClick={() => fetchNextPage()}>
               Load previous messages
-            </button>
+            </Button>
           )}
         </div>
       )}
       <div className="mt-auto flex flex-col-reverse">
-        {data.pages.map((group, i) => (
+        {data?.pages.map((group, i) => (
           <Fragment key={i}>
             {group.items.map((message: Message) => (
               <ChatItem
                 key={message.id}
+                type={type}
                 message={message}
                 currentMember={currentMember}
               />

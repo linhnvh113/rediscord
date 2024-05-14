@@ -1,11 +1,12 @@
-import type { NextApiRequest, NextApiResponse } from "next";
+import type { NextApiRequest } from "next";
 
 import { currentProfilePageRouter } from "@/lib/current-profile";
 import { db } from "@/lib/db";
+import type { NextApiResponseSocket } from "@/types";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse,
+  res: NextApiResponseSocket,
 ) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed." });
@@ -89,13 +90,13 @@ export default async function handler(
       },
     });
 
-    const emitKey = `conversationId:${conversationId}:messages`;
+    const emitKey = `chat:${conversationId}:messages`;
 
-    res?.socket?.server?.io?.emit(emitKey, message);
+    res.socket.server.io.emit(emitKey, message);
 
     return res.status(201).json(message);
   } catch (error) {
     console.log("[POST] /messages");
-    return res.status(500).json({ message: "Internal Error" });
+    return res.status(500).json({ message: "Internal Server" });
   }
 }

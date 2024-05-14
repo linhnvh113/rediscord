@@ -11,11 +11,14 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { useModalStore } from "@/hooks/use-modal-store";
+import { useDeleteChannel } from "@/services/queries/channel.query";
 
 export default function DeleteChannelModal() {
   const { type, data, isOpen, onClose } = useModalStore();
 
   const isModalOpen = isOpen && type === "DELETE_CHANNEL";
+
+  const { mutate } = useDeleteChannel();
 
   return (
     <AlertDialog open={isModalOpen} onOpenChange={onClose}>
@@ -29,7 +32,9 @@ export default function DeleteChannelModal() {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Hủy bỏ</AlertDialogCancel>
-          <AlertDialogAction>Xóa kênh</AlertDialogAction>
+          <AlertDialogAction onClick={() => mutate(data.channel!.id)}>
+            Xóa kênh
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

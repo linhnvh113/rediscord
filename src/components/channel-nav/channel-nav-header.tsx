@@ -87,7 +87,10 @@ export default function ChannelNavHeader({
         )}
         {isModerator && <DropdownMenuSeparator />}
         {isAdmin && (
-          <DropdownMenuItem className="px-3 py-2 text-destructive">
+          <DropdownMenuItem
+            className="px-3 py-2 text-destructive"
+            onClick={() => onOpen("DELETE_SERVER", { server })}
+          >
             Xóa máy chủ
             <Trash size={20} className="ml-auto" />
           </DropdownMenuItem>

@@ -13,7 +13,7 @@ export type UpdateChannelBody = {
 export const channelApi = {
   create: async (body: CreateChannelBody) => {
     const res = await fetch("/api/channels", {
-      method: "post",
+      method: "POST",
       body: JSON.stringify(body),
     });
 
@@ -22,7 +22,7 @@ export const channelApi = {
 
   update: async (body: UpdateChannelBody) => {
     const res = await fetch(`/api/channels/${body.id}`, {
-      method: "patch",
+      method: "PATCH",
       body: JSON.stringify(body),
     });
 
@@ -31,7 +31,7 @@ export const channelApi = {
 
   delete: async (id: string) => {
     await fetch(`/api/channels/${id}`, {
-      method: "delete",
+      method: "DELETE",
     });
   },
 };

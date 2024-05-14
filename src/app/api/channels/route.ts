@@ -6,17 +6,14 @@ import { db } from "@/lib/db";
 
 export async function POST(req: Request) {
   try {
-    const { searchParams } = new URL(req.url);
-
     /* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */
-    const { name, type } = await req.json();
+    const { name, type, serverId } = await req.json();
 
     const profile = await currentProfile();
     if (!profile) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    const serverId = searchParams.get("serverId");
     if (!serverId) {
       return new NextResponse("Server ID is missing", { status: 400 });
     }
@@ -31,7 +28,7 @@ export async function POST(req: Request) {
       data: {
         name: name as string,
         type: type as ChannelType,
-        serverId,
+        serverId: serverId as string,
         profileId: profile.id,
       },
     });

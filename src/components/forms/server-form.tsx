@@ -16,7 +16,10 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useModalStore } from "@/hooks/use-modal-store";
-import { useCreateServer } from "@/services/queries/server.query";
+import {
+  useCreateServer,
+  useUpdateServer,
+} from "@/services/queries/server.query";
 
 const formSchema = z.object({
   name: z.string().min(1, "Hãy đặt tên máy chủ"),
@@ -41,17 +44,31 @@ export default function ServerForm() {
   });
 
   const { mutate: mutateCreateServer } = useCreateServer();
+  const { mutate: mutateUpdateServer } = useUpdateServer();
 
   const isLoading = form.formState.isSubmitting;
 
   const onSubmit = async (body: FormSchema) => {
-    mutateCreateServer(body, {
-      onSuccess: () => {
-        form.reset();
-        onClose();
-        router.refresh();
-      },
-    });
+    if (data.server) {
+      mutateUpdateServer(
+        { id: data.server.id, ...body },
+        {
+          onSuccess: () => {
+            form.reset();
+            onClose();
+            router.refresh();
+          },
+        },
+      );
+    } else {
+      mutateCreateServer(body, {
+        onSuccess: () => {
+          form.reset();
+          onClose();
+          router.refresh();
+        },
+      });
+    }
   };
 
   return (

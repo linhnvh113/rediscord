@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { Member } from "@prisma/client";
 import { format } from "date-fns";
-import { Edit, Trash } from "lucide-react";
+import { Edit, File, Trash } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
@@ -20,10 +20,12 @@ import UserAvatar from "@/components/user-avatar";
 import { DATE_FORMAT, ICON_MAP } from "@/constants";
 import { useModalStore } from "@/hooks/use-modal-store";
 import { cn, getFileType } from "@/lib/utils";
+import { useUpdateDM } from "@/services/queries/direct-message.query";
 import { useUpdateMessage } from "@/services/queries/message.query";
 import type { Message } from "@/types";
 
 interface ChatItemProps {
+  type: "channel" | "conversation";
   message: Message;
   currentMember: Member;
 }
@@ -34,7 +36,11 @@ const formSchema = z.object({
 
 type FormSchema = z.infer<typeof formSchema>;
 
-export default function ChatItem({ message, currentMember }: ChatItemProps) {
+export default function ChatItem({
+  type,
+  message,
+  currentMember,
+}: ChatItemProps) {
   const router = useRouter();
   const params = useParams();
 
@@ -49,7 +55,7 @@ export default function ChatItem({ message, currentMember }: ChatItemProps) {
 
   const { onOpen } = useModalStore();
 
-  const fileType = getFileType(message.fileUrl);
+  const fileType = getFileType(message.fileUrl!);
 
   const isAdmin = currentMember.role === "ADMIN";
   const isModerator = currentMember.role === "MODERATOR";
@@ -65,6 +71,7 @@ export default function ChatItem({ message, currentMember }: ChatItemProps) {
   const isLoading = form.formState.isLoading;
 
   const { mutate: mutateUpdateMessage } = useUpdateMessage();
+  const { mutate: mutateUpdateDM } = useUpdateDM();
 
   const onAvatarClick = () => {
     if (message.member.id === currentMember.id) {
@@ -72,20 +79,28 @@ export default function ChatItem({ message, currentMember }: ChatItemProps) {
     }
 
     router.push(
-      `/servers/${params.serverId}/conversations/${message.member.id}`,
+      `/servers/${params?.serverId as string}/conversations/${message.member.id}`,
     );
   };
 
-  const onSubmit = async (values: FormSchema) => {
-    mutateUpdateMessage(
-      { id: message.id, values, query: params },
-      {
-        onSuccess: () => {
-          form.reset();
-          setIsEditing(false);
+  const onSubmit = async (body: FormSchema) => {
+    if (type === "channel") {
+      mutateUpdateMessage(
+        { id: message.id, ...body },
+        {
+          onSuccess: () => {
+            form.reset();
+            setIsEditing(false);
+          },
         },
-      },
-    );
+      );
+    } else {
+      mutateUpdateDM({
+        ...body,
+        id: message.id,
+        conversationId: params?.conversationId as string,
+      });
+    }
   };
 
   useEffect(() => {
@@ -121,20 +136,32 @@ export default function ChatItem({ message, currentMember }: ChatItemProps) {
           </div>
           {isImage && (
             <Link
-              href={message.fileUrl}
+              href={message.fileUrl!}
               target="_blank"
               rel="noopener noreferrer"
               className="relative mt-2 flex aspect-square size-48 items-center overflow-hidden rounded-md"
             >
               <Image
-                src={message.fileUrl}
+                src={message.fileUrl!}
                 fill
                 alt={message.content}
                 className="object-cover"
               />
             </Link>
           )}
-          {/* {isPdf && <div></div>} */}
+          {isPdf && (
+            <div className="relative mt-2 flex items-center rounded-md bg-background/10 p-2">
+              <File className="size-10 fill-indigo-200 stroke-indigo-400" />
+              <Link
+                href={message.fileUrl!}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="ml-2 text-sm text-indigo-500 hover:underline"
+              >
+                PDF File
+              </Link>
+            </div>
+          )}
           {!message.fileUrl && !isEditing && (
             <p
               className={cn(
@@ -191,7 +218,7 @@ export default function ChatItem({ message, currentMember }: ChatItemProps) {
           <AppTooltip label="Delete">
             <Trash
               className="ml-auto size-4"
-              onClick={() => onOpen("DELETE_MESSAGE")}
+              onClick={() => onOpen("DELETE_MESSAGE", { message })}
             />
           </AppTooltip>
         </div>

@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import ChatHeader from "@/components/chat/chat-header";
 import ChatInput from "@/components/chat/chat-input";
 import ChatMessages from "@/components/chat/chat-messages";
+import MediaRoom from "@/components/media-room";
 import { getOrCreateConversation } from "@/lib/conversation";
 import { currentProfile } from "@/lib/current-profile";
 import { db } from "@/lib/db";
@@ -13,9 +14,12 @@ interface PageProps {
     serverId: string;
     memberId: string;
   };
+  searchParams: {
+    video?: boolean;
+  };
 }
 
-export default async function Page({ params }: PageProps) {
+export default async function Page({ params, searchParams }: PageProps) {
   const profile = await currentProfile();
   if (!profile) {
     return auth().redirectToSignIn();
@@ -56,25 +60,28 @@ export default async function Page({ params }: PageProps) {
         name={otherMember.profile.name}
         imageUrl={otherMember.profile.imageUrl}
       />
-      <ChatMessages
-        type="conversation"
-        currentMember={currentMember}
-        name={otherMember.profile.name}
-        apiUrl="/api/direct-messages"
-        socketUrl="/api/socket/direct-messages"
-        socketQuery={{
-          conversationId: conversation.id,
-        }}
-        paramKey="conversationId"
-        paramValue={conversation.id}
-      />
-      <ChatInput
-        type="conversation"
-        name={otherMember.profile.name}
-        query={{
-          conversationId: conversation.id,
-        }}
-      />
+      {searchParams.video && (
+        <MediaRoom chatId={conversation.id} video={true} audio={true} />
+      )}
+      {!searchParams.video && (
+        <>
+          <ChatMessages
+            type="conversation"
+            currentMember={currentMember}
+            name={otherMember.profile.name}
+            apiUrl="/api/direct-messages"
+            paramKey="conversationId"
+            paramValue={conversation.id}
+          />
+          <ChatInput
+            type="conversation"
+            name={otherMember.profile.name}
+            query={{
+              conversationId: conversation.id,
+            }}
+          />
+        </>
+      )}
     </div>
   );
 }

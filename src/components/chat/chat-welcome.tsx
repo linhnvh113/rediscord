@@ -14,13 +14,12 @@ export default function ChatWelcome({ type, name }: ChatWelcomeProps) {
         </div>
       )}
       <p className="text-xl font-bold md:text-3xl">
-        {type === "channel" ? "Welcome to #" : ""}
-        {name}
+        {type === "channel" ? `Chào mừng bạn đến với #${name}!` : `${name}`}
       </p>
       <p className="text-sm">
         {type === "channel"
-          ? `This is the start of the ${name} channel`
-          : `This is the start of your conversation with ${name}`}
+          ? `Đây là sự khởi đầu của kênh ${name}`
+          : `Đây là phần mở đầu trong lịch sử các tinh nhắn trực tiếp của bạn với ${name}`}
       </p>
     </div>
   );

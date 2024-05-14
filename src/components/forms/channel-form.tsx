@@ -63,13 +63,16 @@ export default function ChannelForm() {
 
   const onSubmit = async (body: FormSchema) => {
     if (data.channel) {
-      mutateUpdateChannel(data.channel, {
-        onSuccess: () => {
-          form.reset();
-          onClose();
-          router.refresh();
+      mutateUpdateChannel(
+        { id: data.channel.id, ...body, serverId: data.channel.serverId },
+        {
+          onSuccess: () => {
+            form.reset();
+            onClose();
+            router.refresh();
+          },
         },
-      });
+      );
     } else {
       mutateCreateChannel(
         { ...body, serverId: params!.serverId },

@@ -1,46 +1,71 @@
 import qs from "query-string";
 
-import { MESSAGE_API_URL } from "@/constants";
-
-type CreateMessageBody = {
-  content: string;
-  fileUrl?: string;
-  serverId: string;
-  channelId: string;
-};
-
-type UpdateMessageBody = {
-  id: string;
-} & Partial<CreateMessageBody>;
+import { REQUEST_HEADER } from "@/constants";
+import type { QueryObject } from "@/types";
+import type {
+  CreateMessageBody,
+  UpdateMessageBody,
+} from "@/types/message.types";
 
 export const messageApi = {
-  create: async (body: CreateMessageBody) => {
-    const res = await fetch("/api/socket/messages", {
-      method: "post",
+  create: async (body: CreateMessageBody, queryObject?: QueryObject) => {
+    const url = qs.stringifyUrl({
+      url: "/api/socket/messages",
+      query: { ...queryObject },
+    });
+
+    const res = await fetch(url, {
+      method: "POST",
       body: JSON.stringify(body),
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: REQUEST_HEADER,
     });
 
     return res.json();
   },
 
-  update: async (body: UpdateMessageBody) => {
-    const res = await fetch(`/api/socket/messages/${body.id}`, {
-      method: "patch",
+  update: async (body: UpdateMessageBody, queryObject?: QueryObject) => {
+    const url = qs.stringifyUrl({
+      url: `/api/socket/messages/${body.id}`,
+      query: { ...queryObject },
+    });
+
+    const res = await fetch(url, {
+      method: "PATCH",
       body: JSON.stringify(body),
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: REQUEST_HEADER,
     });
 
     return res.json();
   },
 
-  delete: async (id: string) => {
-    await fetch("", {
-      method: "delete",
+  delete: async (id: string, queryObject?: QueryObject) => {
+    const url = qs.stringifyUrl({
+      url: `/api/socket/messages/${id}`,
+      query: { ...queryObject },
     });
+
+    const res = await fetch(url, {
+      method: "DELETE",
+    });
+
+    return res.json();
+  },
+
+  sendAttachment: async (
+    body: CreateMessageBody,
+    queryObject?: QueryObject,
+  ) => {
+    const url = qs.stringifyUrl({
+      url: "/api/socket/messages",
+      query: { ...queryObject },
+    });
+
+    const res = await fetch(url, {
+      method: "POST",
+      body: JSON.stringify(body),
+      headers: REQUEST_HEADER,
+    });
+
+    return res.json();
   },
 };

@@ -11,11 +11,14 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { useModalStore } from "@/hooks/use-modal-store";
+import { useDeleteMessage } from "@/services/queries/message.query";
 
 export default function DeleteMessageModal() {
-  const { type, isOpen, onClose } = useModalStore();
+  const { type, data, isOpen, onClose } = useModalStore();
 
   const isModalOpen = isOpen && type === "DELETE_MESSAGE";
+
+  const { mutate } = useDeleteMessage();
 
   return (
     <AlertDialog open={isModalOpen} onOpenChange={onClose}>
@@ -28,7 +31,9 @@ export default function DeleteMessageModal() {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Hủy bỏ</AlertDialogCancel>
-          <AlertDialogAction>Xóa</AlertDialogAction>
+          <AlertDialogAction onClick={() => mutate(data.message!.id)}>
+            Xóa
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

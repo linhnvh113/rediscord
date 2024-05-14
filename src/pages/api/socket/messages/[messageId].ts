@@ -1,11 +1,12 @@
-import type { NextApiRequest, NextApiResponse } from "next";
+import type { NextApiRequest } from "next";
 
 import { currentProfilePageRouter } from "@/lib/current-profile";
 import { db } from "@/lib/db";
+import type { NextApiResponseSocket } from "@/types";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse,
+  res: NextApiResponseSocket,
 ) {
   if (req.method !== "DELETE" && req.method !== "PATCH") {
     return res.status(405).json({ error: "Method not allowed" });
@@ -13,19 +14,20 @@ export default async function handler(
 
   try {
     const profile = await currentProfilePageRouter(req);
-    const { messageId, serverId, channelId } = req.query;
-    const { content } = req.body;
-
     if (!profile) {
-      return res.status(401).json({ error: "Unauthorized" });
+      return res.status(401).json({ error: "Unauthorized - profile" });
     }
 
+    /* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */
+    const { content } = req.body;
+    const { messageId, serverId, channelId } = req.query;
+
     if (!serverId) {
-      return res.status(401).json({ error: "Unauthorized" });
+      return res.status(401).json({ error: "Server id is missing" });
     }
 
     if (!channelId) {
-      return res.status(401).json({ error: "Unauthorized" });
+      return res.status(401).json({ error: "Channel id is missing" });
     }
 
     const server = await db.server.findFirst({
@@ -134,7 +136,7 @@ export default async function handler(
       });
     }
 
-    const emitKey = `channelId:${channel.id}:messages:update`;
+    const emitKey = `chat:${channel.id}:messages:update`;
     res.socket.server.io.emit(emitKey, message);
 
     return res.status(200).json(message);

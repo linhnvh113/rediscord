@@ -79,7 +79,11 @@ export default function ChannelNavSearch({ data }: ChannelNavSearchProps) {
             return (
               <CommandGroup key={label} heading={label}>
                 {channels.map((channel) => (
-                  <CommandItem key={channel.id} disabled={false}>
+                  <CommandItem
+                    key={channel.id}
+                    disabled={false}
+                    onClick={changeUrl}
+                  >
                     {CHANNEL_ICON_MAP[channel.type]}
                     <span>{channel.name}</span>
                   </CommandItem>

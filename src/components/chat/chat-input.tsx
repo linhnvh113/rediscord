@@ -8,13 +8,14 @@ import { z } from "zod";
 import EmojiPicker from "@/components/emoji-picker";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useModalStore } from "@/hooks/use-modal-store";
 import { useCreateDM } from "@/services/queries/direct-message.query";
 import { useCreateMessage } from "@/services/queries/message.query";
 
 interface ChatInputProps {
   type: "channel" | "conversation";
   name: string;
-  query: Record<string, string>;
+  query?: Record<string, string>;
 }
 
 const formSchema = z.object({
@@ -24,6 +25,8 @@ const formSchema = z.object({
 type FormSchema = z.infer<typeof formSchema>;
 
 export default function ChatInput({ type, name, query }: ChatInputProps) {
+  const { onOpen } = useModalStore();
+
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -31,24 +34,21 @@ export default function ChatInput({ type, name, query }: ChatInputProps) {
     },
   });
 
-  const { mutate: mutateCreateMessage } = useCreateMessage();
-  const { mutate: mutateCreateDM } = useCreateDM();
+  const { mutate: createMessages } = useCreateMessage();
+  const { mutate: createDM } = useCreateDM();
 
   const isLoading = form.formState.isLoading;
 
   const onSubmit = async (body: FormSchema) => {
     if (type === "channel") {
-      mutateCreateMessage(
-        { ...body, channelId: query.channelId, serverId: query.serverId },
-        {
-          onSuccess: () => {
-            form.reset();
-          },
+      createMessages(body, {
+        onSuccess: () => {
+          form.reset();
         },
-      );
+      });
     } else {
-      mutateCreateDM(
-        { ...body, conversationId: query.conversationId },
+      createDM(
+        { ...body, conversationId: query?.conversationId },
         {
           onSuccess: () => {
             form.reset();
@@ -67,11 +67,11 @@ export default function ChatInput({ type, name, query }: ChatInputProps) {
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <div className="relative p-4 pb-6">
+                <div className="relative px-4 py-6">
                   <button
                     type="button"
-                    // onClick={() => {}}
-                    className="absolute left-8 top-7 size-6"
+                    onClick={() => onOpen("MESSAGE_FILE")}
+                    className="absolute left-8 top-1/2 -translate-y-1/2"
                   >
                     <Plus />
                   </button>
@@ -82,10 +82,10 @@ export default function ChatInput({ type, name, query }: ChatInputProps) {
                     autoComplete="off"
                     {...field}
                   />
-                  <div className="absolute right-8 top-7">
+                  <div className="absolute right-8 top-1/2 -translate-y-1/2">
                     <EmojiPicker
                       onChange={(emoji: string) =>
-                        field.onChange(`${field.value} ${emoji}`)
+                        field.onChange(`${field.value}${emoji}`)
                       }
                     />
                   </div>

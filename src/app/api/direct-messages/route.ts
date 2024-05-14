@@ -1,4 +1,4 @@
-import type { DirectMessage, Message } from "@prisma/client";
+import type { DirectMessage } from "@prisma/client";
 import { NextResponse } from "next/server";
 
 import { MESSAGES_BATCH } from "@/constants";
@@ -27,7 +27,7 @@ export async function GET(req: Request) {
     let messages: DirectMessage[] = [];
     if (cursor) {
       messages = await db.directMessage.findMany({
-        take: 10,
+        take: MESSAGES_BATCH,
         skip: 1,
         cursor: {
           id: cursor,
@@ -48,7 +48,7 @@ export async function GET(req: Request) {
       });
     } else {
       messages = await db.directMessage.findMany({
-        take: 10,
+        take: MESSAGES_BATCH,
         where: {
           conversationId,
         },
