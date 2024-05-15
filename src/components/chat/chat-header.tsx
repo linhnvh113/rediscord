@@ -23,7 +23,7 @@ export default function ChatHeader({
   return (
     <div className="text-md flex h-12 items-center gap-3 border-b px-3 font-semibold">
       <MobileToggle serverId={serverId} />
-      {type === "channel" && <Hash />}
+      {type === "channel" && <Hash className="text-muted-foreground" />}
       {type === "conversation" && (
         <UserAvatar src={imageUrl} className="size-8 md:size-8" />
       )}

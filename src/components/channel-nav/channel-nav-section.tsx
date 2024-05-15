@@ -37,24 +37,21 @@ export default function ChannelNavSection({
   return (
     <Collapsible defaultOpen>
       <CollapsibleTrigger asChild>
-        <div className="flex cursor-pointer select-none items-center justify-between">
-          <ChevronDown className="size-4" />
-          <p className="flex-1 text-xs font-semibold uppercase">{label}</p>
+        <div className="my-2 flex items-center justify-between">
+          <p className="flex flex-1 cursor-pointer select-none text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+            <ChevronDown className="size-4" />
+            {label}
+          </p>
           {role !== MemberRole.GUEST && (
             <AppTooltip label="Create Channel" side="top">
-              <Button
-                variant="ghost"
-                size="sm"
-                className="px-2"
-                onClick={handleClick}
-              >
+              <button type="button" onClick={handleClick}>
                 <Plus className="size-4" />
-              </Button>
+              </button>
             </AppTooltip>
           )}
         </div>
       </CollapsibleTrigger>
-      <CollapsibleContent>
+      <CollapsibleContent className="space-y-1">
         {channels.map((channel) => (
           <ChannelNavItem key={channel.id} channel={channel} role={role} />
         ))}

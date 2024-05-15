@@ -42,13 +42,13 @@ export default function ChannelNavHeader({
         <Button
           variant="ghost"
           size="lg"
-          className="justify-between rounded-none"
+          className="select-none justify-between rounded-none"
         >
           {server.name}
-          <ChevronDown />
+          <ChevronDown className="hidden sm:block" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56 space-y-0.5 text-xs">
+      <DropdownMenuContent className="w-56 space-y-0.5 text-xs text-muted-foreground">
         {isModerator && (
           <DropdownMenuItem
             className="px-3 py-2 text-primary"

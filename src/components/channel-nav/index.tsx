@@ -61,15 +61,15 @@ export default async function ChannelNav({ serverId }: ChannelNavProps) {
 
   const searchData = [
     {
-      label: "Text Channels",
+      label: "Kênh văn bản",
       channels: textChannels,
     },
     {
-      label: "Voice Channels",
+      label: "Kênh thoại",
       channels: voiceChannels,
     },
     {
-      label: "Video Channels",
+      label: "Kênh video",
       channels: videoChannels,
     },
   ];
@@ -82,7 +82,7 @@ export default async function ChannelNav({ serverId }: ChannelNavProps) {
           <div className="mt-2">
             <ChannelNavSearch data={searchData} />
           </div>
-          <Separator className="my-2" />
+          <Separator className="my-4" />
           {!!textChannels?.length && (
             <ChannelNavSection
               label="Text Channels"

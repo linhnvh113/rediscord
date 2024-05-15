@@ -34,10 +34,10 @@ export default function ChannelNavSearch({ data }: ChannelNavSearchProps) {
     setOpen(false);
 
     if ("member") {
-      return router.push(`/servers/${params.serverId}/conversations/memberId`);
+      return router.push(`/servers/${params?.serverId}/conversations/memberId`);
     }
     if ("channel") {
-      return router.push(`/servers/${params.serverId}/channels/channelId`);
+      return router.push(`/servers/${params?.serverId}/channels/channelId`);
     }
   };
 

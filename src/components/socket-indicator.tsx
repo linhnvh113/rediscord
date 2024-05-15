@@ -9,14 +9,14 @@ export default function SocketIndicator() {
   if (!isConnected) {
     return (
       <Badge variant="outline" className="bg-yellow-600 text-white">
-        Fallback: Polling every 1s
+        Fallback
       </Badge>
     );
   }
 
   return (
     <Badge variant="outline" className="bg-emerald-600 text-white">
-      Live: Real-time updates
+      Live
     </Badge>
   );
 }

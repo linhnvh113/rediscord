@@ -19,10 +19,10 @@ export default function MemberListItem({ member }: MemberListItemProps) {
 
   return (
     <div
-      className="mb-4 flex cursor-pointer items-center gap-2 rounded p-1.5 hover:bg-zinc-700"
+      className="mb-2 flex cursor-pointer items-center gap-2 rounded px-3 py-2 hover:bg-accent"
       onClick={onClickMember}
     >
-      <UserAvatar src={member.profile?.imageUrl} className="size-2" />
+      <UserAvatar src={member.profile?.imageUrl} />
       <h4>{member.profile?.name}</h4>
     </div>
   );

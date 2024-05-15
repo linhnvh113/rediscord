@@ -130,7 +130,7 @@ export default function ChatItem({
             <AppTooltip label={message.member.role}>
               {ICON_MAP[message.member.role]}
             </AppTooltip>
-            <span className="ml-2 text-xs">
+            <span className="ml-2 text-xs text-muted-foreground">
               {format(new Date(message.createdAt), DATE_FORMAT)}
             </span>
           </div>
@@ -166,12 +166,14 @@ export default function ChatItem({
             <p
               className={cn(
                 "text-sm",
-                message.deleted && "mt-1 text-xs italic",
+                message.deleted && "mt-1 text-xs italic text-muted-foreground",
               )}
             >
               {message.content}
               {message.updatedAt !== message.createdAt && !message.deleted && (
-                <span className="mx-2 text-xs">(edited)</span>
+                <span className="mx-2 text-xs text-muted-foreground">
+                  (edited)
+                </span>
               )}
             </p>
           )}
@@ -198,7 +200,7 @@ export default function ChatItem({
                   Save
                 </Button>
               </form>
-              <span className="mt-1 text-xs">
+              <span className="mt-1 text-xs text-muted-foreground">
                 Press esc to cancel, enter to save
               </span>
             </Form>
@@ -206,18 +208,18 @@ export default function ChatItem({
         </div>
       </div>
       {canDeleteMessage && (
-        <div className="absolute -top-2 right-5 hidden items-center gap-2 rounded-sm border p-1 group-hover:flex">
+        <div className="absolute -top-2 right-5 hidden items-center gap-2 rounded-sm border bg-accent p-1 shadow-md group-hover:flex">
           {canEditMessage && (
             <AppTooltip label="Edit">
               <Edit
-                className="ml-auto size-4"
+                className="ml-auto size-5"
                 onClick={() => setIsEditing(true)}
               />
             </AppTooltip>
           )}
           <AppTooltip label="Delete">
             <Trash
-              className="ml-auto size-4"
+              className="ml-auto size-5"
               onClick={() => onOpen("DELETE_MESSAGE", { message })}
             />
           </AppTooltip>

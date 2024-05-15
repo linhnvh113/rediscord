@@ -35,7 +35,7 @@ export default function ChannelNavItem({ channel, role }: ChannelNavItemProps) {
     <Link
       href={`/servers/${params?.serverId}/channels/${channel.id}`}
       className={cn(
-        "group w-full justify-start px-2",
+        "group w-full justify-start px-2 text-muted-foreground",
         buttonVariants({ variant: "ghost", size: "sm" }),
         params?.channelId === channel.id && "bg-accent text-accent-foreground",
       )}
