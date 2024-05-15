@@ -1,0 +1,5 @@
+User-Agent: *
+Allow: /
+Disallow: /private/
+
+Sitemap: https://rediscord-bq1e.onrender.com/sitemap.xml

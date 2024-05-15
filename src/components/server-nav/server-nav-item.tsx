@@ -37,7 +37,13 @@ export default function ServerNavItem({ server }: ServerNavItemProps) {
             router.push(`/servers/${id}`);
           }}
         >
-          <Image src={imageUrl} fill alt={name} />
+          <Image
+            src={imageUrl}
+            fill
+            sizes="(max-width: 768px) 100vw, 33vw"
+            alt={name}
+            priority
+          />
         </button>
       </div>
     </AppTooltip>

@@ -25,7 +25,7 @@ export default function ServerModal() {
           <DialogTitle>Tủy chỉnh máy chủ của bạn</DialogTitle>
           <DialogDescription>
             Hãy cá nhân hóa máy chủ bằng cách đặt tên và thêm biểu tượng đại
-            diện. Bạn có thể thay đỏi bất cứ lúc nào.
+            diện. Bạn có thể thay đổi bất cứ lúc nào.
           </DialogDescription>
         </DialogHeader>
         <ServerForm />

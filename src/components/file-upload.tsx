@@ -26,9 +26,9 @@ export default function FileUpload({
         <button
           type="button"
           onClick={() => onChange("")}
-          className="absolute right-0 top-0 rounded-full bg-destructive p-1 shadow-sm"
+          className="absolute right-0 top-0 rounded-full bg-destructive p-1 text-destructive-foreground shadow-sm"
         >
-          <X size={16} />
+          <X className="size-4" />
         </button>
       </div>
     );
