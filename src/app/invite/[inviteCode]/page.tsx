@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 
 import { currentProfile } from "@/lib/current-profile";
 import { db } from "@/lib/db";
+import { initialProfile } from "@/lib/initial-profile";
 
 interface PageProps {
   params: {
@@ -11,9 +12,9 @@ interface PageProps {
 }
 
 export default async function Page({ params }: PageProps) {
-  const profile = await currentProfile();
+  let profile = await currentProfile();
   if (!profile) {
-    return auth().redirectToSignIn();
+    profile = await initialProfile();
   }
 
   if (!params.inviteCode) {
