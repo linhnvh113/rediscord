@@ -75,7 +75,7 @@ export default async function ChannelNav({ serverId }: ChannelNavProps) {
   ];
 
   return (
-    <aside className="sticky top-0 h-screen">
+    <aside className="sticky top-0 z-10 h-screen">
       <div className="flex h-full flex-col border-x bg-background">
         <ChannelNavHeader server={server} role={role} />
         <ScrollArea className="flex-1 px-3">

@@ -22,6 +22,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { FORM_NAME } from "@/constants";
 import { useModalStore } from "@/hooks/use-modal-store";
 import {
   useCreateChannel,
@@ -56,14 +57,14 @@ export default function ChannelForm() {
     resolver: zodResolver(formSchema),
   });
 
-  const { mutate: mutateCreateChannel } = useCreateChannel();
-  const { mutate: mutateUpdateChannel } = useUpdateChannel();
+  const { mutate: createChannel } = useCreateChannel();
+  const { mutate: updateChannel } = useUpdateChannel();
 
   const isLoading = form.formState.isSubmitting;
 
   const onSubmit = async (body: FormSchema) => {
     if (data.channel) {
-      mutateUpdateChannel(
+      updateChannel(
         { id: data.channel.id, ...body, serverId: data.channel.serverId },
         {
           onSuccess: () => {
@@ -74,7 +75,7 @@ export default function ChannelForm() {
         },
       );
     } else {
-      mutateCreateChannel(
+      createChannel(
         { ...body, serverId: params!.serverId },
         {
           onSuccess: () => {
@@ -90,8 +91,8 @@ export default function ChannelForm() {
   return (
     <Form {...form}>
       <form
-        id="channel-form"
-        name="channel-form"
+        id={FORM_NAME.CHANNEL}
+        name={FORM_NAME.CHANNEL}
         className="space-y-6"
         onSubmit={form.handleSubmit(onSubmit)}
       >

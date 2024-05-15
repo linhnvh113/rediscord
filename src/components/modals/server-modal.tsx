@@ -10,6 +10,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { FORM_NAME } from "@/constants";
 import { useModalStore } from "@/hooks/use-modal-store";
 
 export default function ServerModal() {
@@ -29,7 +30,7 @@ export default function ServerModal() {
         </DialogHeader>
         <ServerForm />
         <DialogFooter>
-          <Button type="submit" form="server-form">
+          <Button type="submit" form={FORM_NAME.SERVER}>
             Tạo
           </Button>
         </DialogFooter>

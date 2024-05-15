@@ -13,7 +13,7 @@ export default function ServerNavAction() {
       <div className="group flex items-center">
         <button
           type="button"
-          className="mx-3 flex size-12 items-center justify-center overflow-hidden rounded-3xl bg-background transition-all group-hover:rounded-2xl group-hover:bg-emerald-500 dark:bg-neutral-700"
+          className="mx-3 flex size-12 items-center justify-center overflow-hidden rounded-3xl bg-accent transition-all group-hover:rounded-2xl group-hover:bg-emerald-500"
           onClick={() => onOpen("SERVER")}
         >
           <Plus className="text-emerald-500 transition group-hover:text-white" />

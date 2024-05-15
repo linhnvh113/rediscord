@@ -15,6 +15,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { FORM_NAME } from '@/constants';
 import { useModalStore } from "@/hooks/use-modal-store";
 import {
   useCreateServer,
@@ -74,8 +75,8 @@ export default function ServerForm() {
   return (
     <Form {...form}>
       <form
-        id="server-form"
-        name="server-form"
+        id={FORM_NAME.SERVER}
+        name={FORM_NAME.SERVER}
         className="space-y-6"
         onSubmit={form.handleSubmit(onSubmit)}
       >

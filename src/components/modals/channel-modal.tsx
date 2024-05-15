@@ -9,6 +9,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { FORM_NAME } from "@/constants";
 import { useModalStore } from "@/hooks/use-modal-store";
 
 export default function ChannelModal() {
@@ -24,7 +25,7 @@ export default function ChannelModal() {
         </DialogHeader>
         <ChannelForm />
         <DialogFooter>
-          <Button type="submit" form="channel-form">
+          <Button type="submit" form={FORM_NAME.CHANNEL}>
             Tạo kênh
           </Button>
         </DialogFooter>

@@ -4,11 +4,10 @@ import type { MouseEvent } from "react";
 
 import { type Channel, MemberRole } from "@prisma/client";
 import { Edit, Lock, Trash } from "lucide-react";
-import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 import AppTooltip from "@/components/app-tooltip";
-import { buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { CHANNEL_ICON_MAP } from "@/constants";
 import { useModalStore } from "@/hooks/use-modal-store";
 import { cn } from "@/lib/utils";
@@ -19,26 +18,34 @@ interface ChannelNavItemProps {
 }
 
 export default function ChannelNavItem({ channel, role }: ChannelNavItemProps) {
+  const router = useRouter();
   const params = useParams<{ serverId: string; channelId: string }>();
 
   const { onOpen } = useModalStore();
 
   const handleEditClick = (e: MouseEvent) => {
+    e.stopPropagation();
     onOpen("CHANNEL", { channel });
   };
 
   const handleDeleteClick = (e: MouseEvent) => {
+    e.stopPropagation();
     onOpen("DELETE_CHANNEL", { channel });
   };
 
+  const handleClick = () => {
+    router.push(`/servers/${params?.serverId}/channels/${channel.id}`);
+  };
+
   return (
-    <Link
-      href={`/servers/${params?.serverId}/channels/${channel.id}`}
+    <Button
+      variant="ghost"
+      size="sm"
       className={cn(
         "group w-full justify-start px-2 text-muted-foreground",
-        buttonVariants({ variant: "ghost", size: "sm" }),
         params?.channelId === channel.id && "bg-accent text-accent-foreground",
       )}
+      onClick={handleClick}
     >
       {CHANNEL_ICON_MAP[channel.type]}
       <span className="line-clamp-1 text-sm font-semibold">{channel.name}</span>
@@ -59,6 +66,6 @@ export default function ChannelNavItem({ channel, role }: ChannelNavItemProps) {
         </div>
       )}
       {channel.name === "general" && <Lock className="ml-auto size-4" />}
-    </Link>
+    </Button>
   );
 }

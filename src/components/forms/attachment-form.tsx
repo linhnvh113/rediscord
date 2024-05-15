@@ -4,6 +4,7 @@ import { z } from "zod";
 
 import FileUpload from "@/components/file-upload";
 import { Form, FormField, FormControl, FormItem } from "@/components/ui/form";
+import { FORM_NAME } from "@/constants";
 import { useModalStore } from "@/hooks/use-modal-store";
 import { useSendAttachment } from "@/services/queries/message.query";
 
@@ -44,8 +45,8 @@ export default function AttachmentForm() {
   return (
     <Form {...form}>
       <form
-        id="attachment-form"
-        name="server-form"
+        id={FORM_NAME.ATTACHMENT}
+        name={FORM_NAME.ATTACHMENT}
         className="space-y-6"
         onSubmit={form.handleSubmit(onSubmit)}
       >

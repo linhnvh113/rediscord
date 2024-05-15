@@ -20,8 +20,6 @@ export default function AppTooltip({
   align,
   side,
 }: AppTooltipProps) {
-  // Implement your component logic and rendering here
-
   return (
     <TooltipProvider>
       <Tooltip delayDuration={50}>

@@ -10,9 +10,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { FORM_NAME } from "@/constants";
 import { useModalStore } from "@/hooks/use-modal-store";
 
-export default function MessageFileModal() {
+export default function AttachmentModal() {
   const { type, isOpen, onClose } = useModalStore();
 
   const isModalOpen = isOpen && type === "MESSAGE_FILE";
@@ -26,7 +27,7 @@ export default function MessageFileModal() {
         </DialogHeader>
         <AttachmentForm />
         <DialogFooter>
-          <Button type="submit" form="attachment-form">
+          <Button type="submit" form={FORM_NAME.ATTACHMENT}>
             Gửi
           </Button>
         </DialogFooter>

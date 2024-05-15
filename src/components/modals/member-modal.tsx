@@ -9,13 +9,12 @@ import {
   MoreVertical,
   ShieldQuestion,
 } from "lucide-react";
+import { useRouter } from "next/navigation";
 
-import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
@@ -34,22 +33,32 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import UserAvatar from "@/components/user-avatar";
 import { ICON_MAP } from "@/constants";
 import { useModalStore } from "@/hooks/use-modal-store";
+import {
+  useChangeRoleMember,
+  useKickMember,
+} from "@/services/queries/member.query";
+import type { Server } from "@/types";
 
 export default function MemberModal() {
+  const router = useRouter();
+
   const [loadingId, setLoadingId] = useState("");
 
-  const { type, data, isOpen, onClose } = useModalStore();
+  const { type, data, isOpen, onOpen, onClose } = useModalStore();
 
   const isModalOpen = isOpen && type === "MEMBER";
 
-  const onRoleChange = () => {};
+  const { mutate: changeRoleMember } = useChangeRoleMember();
+  const { mutate: kickMember } = useKickMember();
 
   return (
     <Dialog open={isModalOpen} onOpenChange={onClose}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Quản lý thành viên</DialogTitle>
-          <DialogDescription>2 thành viên</DialogDescription>
+          <DialogDescription>
+            {`${data.server?.members.length} thành viên`}
+          </DialogDescription>
         </DialogHeader>
         <ScrollArea>
           {data.server?.members?.map((member) => (
@@ -60,7 +69,9 @@ export default function MemberModal() {
                   {member.profile?.name}
                   {ICON_MAP[member.role]}
                 </div>
-                <p className="text-xs">{member.profile?.email}</p>
+                <p className="text-xs text-muted-foreground">
+                  {member.profile?.email}
+                </p>
               </div>
               {data.server?.profileId !== member.profileId &&
                 loadingId !== member.id && (
@@ -76,13 +87,37 @@ export default function MemberModal() {
                         </DropdownMenuSubTrigger>
                         <DropdownMenuPortal>
                           <DropdownMenuSubContent>
-                            <DropdownMenuItem>
+                            <DropdownMenuItem
+                              onClick={() =>
+                                changeRoleMember({
+                                  id: member.id,
+                                  role: "GUEST",
+                                })
+                              }
+                            >
                               Guest
                               {member.role === "GUEST" && (
                                 <Check className="ml-auto size-4" />
                               )}
                             </DropdownMenuItem>
-                            <DropdownMenuItem>
+                            <DropdownMenuItem
+                              onClick={() =>
+                                changeRoleMember(
+                                  {
+                                    id: member.id,
+                                    role: "MODERATOR",
+                                  },
+                                  {
+                                    onSuccess: (data) => {
+                                      router.refresh();
+                                      onOpen("MEMBER", {
+                                        server: data as Server,
+                                      });
+                                    },
+                                  },
+                                )
+                              }
+                            >
                               Moderator
                               {member.role === "MODERATOR" && (
                                 <Check className="ml-auto size-4" />
@@ -92,7 +127,17 @@ export default function MemberModal() {
                         </DropdownMenuPortal>
                       </DropdownMenuSub>
                       <DropdownMenuSeparator />
-                      <DropdownMenuItem>
+                      <DropdownMenuItem
+                        className="text-destructive"
+                        onClick={() =>
+                          kickMember(member.id, {
+                            onSuccess: (data) => {
+                              router.refresh();
+                              onOpen("MEMBER", { server: data as Server });
+                            },
+                          })
+                        }
+                      >
                         <Gavel className="mr-2 size-4" />
                         Kick
                       </DropdownMenuItem>
@@ -100,16 +145,11 @@ export default function MemberModal() {
                   </DropdownMenu>
                 )}
               {loadingId === member.id && (
-                <Loader2 className="ml-auto  size-4 animate-spin" />
+                <Loader2 className="ml-auto size-4 animate-spin" />
               )}
             </div>
           ))}
         </ScrollArea>
-        <DialogFooter>
-          <Button type="submit" form="server-form">
-            Create Server
-          </Button>
-        </DialogFooter>
       </DialogContent>
     </Dialog>
   );

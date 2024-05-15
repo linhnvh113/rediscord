@@ -16,6 +16,7 @@ import { Label } from "@/components/ui/label";
 import { useModalStore } from "@/hooks/use-modal-store";
 import { useOrigin } from "@/hooks/use-origin";
 import { useGenerateInviteCode } from "@/services/queries/server.query";
+import type { Server } from "@/types";
 
 export default function InviteModal() {
   const [copied, setCopied] = useState(false);
@@ -28,24 +29,21 @@ export default function InviteModal() {
 
   const inviteUrl = `${origin}/invite/${data.server?.inviteCode}`;
 
-  const onCopy = () => {
+  const handleCopy = () => {
     void navigator.clipboard.writeText(inviteUrl);
     setCopied(true);
 
     setTimeout(() => setCopied(false), 1000);
   };
 
-  const { mutate } = useGenerateInviteCode();
+  const { mutate: generateInviteCode } = useGenerateInviteCode();
 
   const handleGenerateNewLink = async () => {
     setIsLoading(true);
-    mutate(data.server.id, {
-      onError: (err) => {
-        console.log(err);
-      },
+    generateInviteCode(data.server!.id, {
       onSuccess: (data) => {
         setIsLoading(false);
-        onOpen("INVITE", { server: data });
+        onOpen("INVITE", { server: data as Server });
       },
     });
   };
@@ -60,18 +58,18 @@ export default function InviteModal() {
           <Label className="text-xs font-bold">GỬI LINK MỜI CHO HỌ</Label>
           <div className="mt-2 flex items-center gap-2">
             <Input value={inviteUrl} readOnly />
-            <Button size="icon" onClick={onCopy}>
+            <Button size="icon" onClick={handleCopy}>
               {copied ? <Check size={20} /> : <Copy size={20} />}
             </Button>
           </div>
           <Button
             variant="link"
             size="sm"
-            className="mt-4"
+            className="mt-4 text-xs"
             onClick={handleGenerateNewLink}
           >
             TẠO LINK MỚI
-            <RefreshCw size={16} className="ml-2" />
+            <RefreshCw className="ml-2 size-3" />
           </Button>
         </div>
       </DialogContent>
