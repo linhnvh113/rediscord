@@ -2,6 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Plus } from "lucide-react";
+import { useParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -25,6 +26,8 @@ const formSchema = z.object({
 type FormSchema = z.infer<typeof formSchema>;
 
 export default function ChatInput({ type, name, query }: ChatInputProps) {
+  const params = useParams();
+
   const { onOpen } = useModalStore();
 
   const form = useForm<FormSchema>({
@@ -52,6 +55,10 @@ export default function ChatInput({ type, name, query }: ChatInputProps) {
       });
       await fetch("/api/push", {
         method: "POST",
+        body: JSON.stringify({
+          serverId: params?.serverId,
+          title: "Bạn có tin nhắn mới.",
+        }),
       });
     } else {
       createDM(

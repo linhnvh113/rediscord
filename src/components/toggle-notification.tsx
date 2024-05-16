@@ -59,7 +59,7 @@ export function ToggleNotification() {
     <div className="relative">
       {loading && (
         <span className="absolute left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2">
-          <Loader2 />
+          <Loader2 className="animate-spin" />
         </span>
       )}
       {/* {confirmationMessage && (

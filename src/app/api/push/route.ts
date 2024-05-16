@@ -1,5 +1,6 @@
 /* eslint-disable */
 
+import { currentProfile } from "@/lib/current-profile";
 import { db } from "@/lib/db";
 import { clerkClient, currentUser } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
@@ -7,21 +8,16 @@ import webPush, { WebPushError } from "web-push";
 
 export async function POST(req: Request) {
   try {
-    // const event = await req.json();
+    const { serverId, title } = await req.json();
 
-    // const event = JSON.parse(rawBody);
-
-    // console.log("Push web hook body: ", JSON.stringify(event));
-
-    // const recipients = await db.member.findMany({
-    //   where: {
-    //     serverId: "49511e11-6c9a-4daa-9dc5-f062dc69a7c5",
-    //   },
-    // });
+    const profile = await currentProfile();
+    if (!profile) {
+      return new NextResponse("Unauthorized");
+    }
 
     const server = await db.server.findFirst({
       where: {
-        id: "49511e11-6c9a-4daa-9dc5-f062dc69a7c5",
+        id: serverId,
       },
       include: {
         members: {
@@ -30,9 +26,9 @@ export async function POST(req: Request) {
       },
     });
 
-    const recipientIds = server!.members.map((member) => member.profile.userId);
-    // .filter((id) => id !== sender.id);
-    // const channelId = event.channel.id;
+    const recipientIds = server!.members
+      .map((member) => member.profile.userId)
+      .filter((id) => id !== profile.id);
 
     const recipients = await clerkClient.users.getUserList({
       userId: recipientIds,
@@ -46,14 +42,7 @@ export async function POST(req: Request) {
             .sendNotification(
               subscription,
               JSON.stringify({
-                // title: sender.name,
-                // body: event.message.text,
-                // icon: sender.image,
-                // image:
-                //   event.message.attachments[0]?.image_url ||
-                //   event.message.attachments[0]?.thumb_url,
-                // channelId,
-                title: "test noti",
+                title,
               }),
               {
                 vapidDetails: {
