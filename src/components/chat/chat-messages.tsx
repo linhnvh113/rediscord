@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useRef, type ElementRef } from "react";
+import { Fragment, useRef, type ElementRef, useEffect } from "react";
 
 import { Loader2 } from "lucide-react";
 
@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { useChatQuery } from "@/hooks/use-chat-query";
 import { useChatScroll } from "@/hooks/use-chat-scroll";
 import { useChatSocket } from "@/hooks/use-chat-socket";
+import { registerServiceWorker } from "@/lib/serviceWorker";
 import type { Member, Message } from "@/types";
 
 interface ChatMessagesProps {
@@ -43,6 +44,17 @@ export default function ChatMessages({
       paramKey,
       paramValue,
     });
+
+  useEffect(() => {
+    async function setUpServiceWorker() {
+      try {
+        await registerServiceWorker();
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    void setUpServiceWorker();
+  }, []);
 
   useChatSocket({ addKey, updateKey, queryKey });
   useChatScroll({

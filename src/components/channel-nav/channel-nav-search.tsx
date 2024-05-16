@@ -15,12 +15,15 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
-import { CHANNEL_ICON_MAP } from "@/constants";
+import UserAvatar from "@/components/user-avatar";
+import { CHANNEL_ICON_MAP, ICON_MAP } from "@/constants";
+import type { Member } from "@/types";
 
 interface ChannelNavSearchProps {
   data: {
     label: string;
-    channels?: Channel[];
+    type: "channel" | "member";
+    data: Channel[] | Member[];
   }[];
 }
 
@@ -30,15 +33,18 @@ export default function ChannelNavSearch({ data }: ChannelNavSearchProps) {
   const router = useRouter();
   const params = useParams<{ serverId: string }>();
 
-  const changeUrl = () => {
+  const handleItemSelect = ({
+    type,
+    id,
+  }: {
+    type: "channel" | "member";
+    id: string;
+  }) => {
     setOpen(false);
 
-    if ("member") {
-      return router.push(`/servers/${params?.serverId}/conversations/memberId`);
-    }
-    if ("channel") {
-      return router.push(`/servers/${params?.serverId}/channels/channelId`);
-    }
+    return type === "member"
+      ? router.push(`/servers/${params?.serverId}/conversations/${id}`)
+      : router.push(`/servers/${params?.serverId}/channels/${id}`);
   };
 
   useEffect(() => {
@@ -73,19 +79,29 @@ export default function ChannelNavSearch({ data }: ChannelNavSearchProps) {
         <CommandInput placeholder="Search all channels and members" />
         <CommandList>
           <CommandEmpty>No results found</CommandEmpty>
-          {data.map(({ label, channels }) => {
-            if (!channels?.length) return null;
+          {data.map(({ label, type, data }) => {
+            if (!data.length) return null;
 
             return (
               <CommandGroup key={label} heading={label}>
-                {channels.map((channel) => (
+                {data?.map((d) => (
                   <CommandItem
-                    key={channel.id}
-                    disabled={false}
-                    onClick={changeUrl}
+                    key={d.id}
+                    onSelect={() => handleItemSelect({ type, id: d.id })}
+                    // className="flex items-center gap-2"
                   >
-                    {CHANNEL_ICON_MAP[channel.type]}
-                    <span>{channel.name}</span>
+                    {type === "channel" ? (
+                      <>
+                        {CHANNEL_ICON_MAP[d.type]}
+                        <span>{d.name}</span>
+                      </>
+                    ) : (
+                      <>
+                        <UserAvatar src={d.profile.imageUrl} />
+                        {ICON_MAP[d.role]}
+                        <span>{d.profile.name}</span>
+                      </>
+                    )}
                   </CommandItem>
                 ))}
               </CommandGroup>

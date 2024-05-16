@@ -4,6 +4,7 @@ import { auth } from "@clerk/nextjs/server";
 import { ModeToggle } from "@/components/mode-toggle";
 import ServerNavAction from "@/components/server-nav/server-nav-action";
 import ServerNavItem from "@/components/server-nav/server-nav-item";
+import { ToggleNotification } from "@/components/toggle-notification";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { currentProfile } from "@/lib/current-profile";
@@ -36,6 +37,7 @@ export default async function ServerNav() {
           ))}
         </ScrollArea>
         <div className="mt-auto flex flex-col items-center gap-y-4 pb-3">
+          <ToggleNotification />
           <ModeToggle />
           <UserButton
             afterSignOutUrl="/"

@@ -62,15 +62,23 @@ export default async function ChannelNav({ serverId }: ChannelNavProps) {
   const searchData = [
     {
       label: "Kênh văn bản",
-      channels: textChannels,
+      type: "channel",
+      data: textChannels,
     },
     {
       label: "Kênh thoại",
-      channels: voiceChannels,
+      type: "channel",
+      data: voiceChannels,
     },
     {
       label: "Kênh video",
-      channels: videoChannels,
+      type: "channel",
+      data: videoChannels,
+    },
+    {
+      label: "Thành viên",
+      type: "member",
+      data: server.members,
     },
   ];
 

@@ -43,8 +43,15 @@ export default function ChatInput({ type, name, query }: ChatInputProps) {
     if (type === "channel") {
       createMessages(body, {
         onSuccess: () => {
+          // const audio = new Audio(
+          //   "https://res.cloudinary.com/dad0fircy/video/upload/v1695812375/discord-clone/message_crbv6k.mp3",
+          // );
+          // audio.play();
           form.reset();
         },
+      });
+      await fetch("/api/push", {
+        method: "POST",
       });
     } else {
       createDM(
