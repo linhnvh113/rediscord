@@ -11,6 +11,9 @@ const config = {
   prefix: "",
   theme: {
     extend: {
+      backgroundImage: {
+        "auth-pattern": "url('/images/login-background.jpg')",
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
