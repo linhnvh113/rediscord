@@ -21,7 +21,9 @@ export default function MobileToggle({ serverId }: MobileToggleProps) {
         <div className="w-20">
           <ServerNav />
         </div>
-        <ChannelNav serverId={serverId} />
+        <div className="flex-1">
+          <ChannelNav serverId={serverId} />
+        </div>
       </SheetContent>
     </Sheet>
   );

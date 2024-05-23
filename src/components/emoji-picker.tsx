@@ -20,10 +20,10 @@ export default function EmojiPicker({ onChange }: EmojiPickerProps) {
 
   return (
     <Popover>
-      <PopoverTrigger>
+      <PopoverTrigger asChild>
         <Smile />
       </PopoverTrigger>
-      <PopoverContent side="left" align="end" className="w-full p-0">
+      <PopoverContent asChild side="top" align="end">
         <Picker
           theme={resolvedTheme}
           data={data}

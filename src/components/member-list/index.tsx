@@ -3,7 +3,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import type { Member } from "@/types";
 
 interface MemberListProps {
-  members: Member[];
+  members?: Member[];
 }
 
 export default function MemberList({ members }: MemberListProps) {
