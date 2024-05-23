@@ -23,6 +23,9 @@ export const metadata: Metadata = {
     name: "Hoang Linh",
     url: "https://www.facebook.com/hoanglinh371",
   },
+  icons: {
+    icon: "/discord_logo_2.webp",
+  },
   keywords: [
     "rediscord render",
     "rediscord onrender",
