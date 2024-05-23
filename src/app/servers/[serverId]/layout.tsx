@@ -44,12 +44,12 @@ export default async function Layout({ children, params }: LayoutProps) {
   }
 
   return (
-    <div className="grid min-h-screen md:grid-cols-[240px_minmax(0,1fr)_240px]">
+    <div className="grid min-h-screen md:grid-cols-[240px_minmax(0,1fr)] lg:grid-cols-[240px_minmax(0,1fr)_240px]">
       <div className="hidden md:block">
         <ChannelNav serverId={params.serverId} />
       </div>
       <main className="flex-1">{children}</main>
-      <div className="hidden bg-[#2b2d31] md:block">
+      <div className="hidden lg:block">
         <MemberList members={server.members} />
       </div>
     </div>
