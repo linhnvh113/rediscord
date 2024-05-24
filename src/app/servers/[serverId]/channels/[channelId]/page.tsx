@@ -48,7 +48,7 @@ export default async function Page({ params }: PageProps) {
   }
 
   return (
-    <div className="flex h-screen flex-col">
+    <div className="flex h-screen flex-col border-x">
       <ChatHeader
         type="channel"
         name={channel.name}

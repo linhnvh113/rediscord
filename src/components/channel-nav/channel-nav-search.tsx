@@ -61,9 +61,10 @@ export default function ChannelNavSearch({ data }: ChannelNavSearchProps) {
   }, []);
 
   return (
-    <>
+    <div className="my-2">
       <Button
         variant="ghost"
+        size="sm"
         className="w-full justify-start gap-2"
         onClick={() => setOpen(true)}
       >
@@ -76,7 +77,7 @@ export default function ChannelNavSearch({ data }: ChannelNavSearchProps) {
       </Button>
 
       <CommandDialog open={open} onOpenChange={setOpen}>
-        <CommandInput placeholder="Search all channels and members" />
+        <CommandInput placeholder="Tìm kiếm kênh và mọi người" />
         <CommandList>
           <CommandEmpty>No results found</CommandEmpty>
           {data.map(({ label, type, data }) => {
@@ -109,6 +110,6 @@ export default function ChannelNavSearch({ data }: ChannelNavSearchProps) {
           })}
         </CommandList>
       </CommandDialog>
-    </>
+    </div>
   );
 }

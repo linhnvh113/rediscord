@@ -25,7 +25,7 @@ export default function ChatHeader({
   if (type === "channel") {
   }
   return (
-    <div className="text-md flex h-12 items-center gap-3 border-b px-3 font-semibold">
+    <div className="text-md z-10 flex h-12 items-center gap-3 border-b px-3 font-semibold">
       <MobileToggle serverId={serverId} />
       {type === "channel" && <Hash className="text-muted-foreground" />}
       {type === "conversation" && (

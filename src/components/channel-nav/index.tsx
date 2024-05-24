@@ -84,13 +84,11 @@ export default async function ChannelNav({ serverId }: ChannelNavProps) {
 
   return (
     <aside className="sticky top-0 z-10 h-screen">
-      <div className="flex h-full flex-col border-x bg-background">
+      <div className="flex h-full flex-col bg-background">
         <ChannelNavHeader server={server} role={role} />
-        <ScrollArea className="flex-1 px-3">
-          <div className="mt-2">
-            <ChannelNavSearch data={searchData} />
-          </div>
-          <Separator className="my-4" />
+        <ScrollArea className="flex-1 px-2">
+          <ChannelNavSearch data={searchData} />
+          <Separator />
           {!!textChannels?.length && (
             <ChannelNavSection
               label="Text Channels"

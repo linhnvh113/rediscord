@@ -11,7 +11,7 @@ export default function MemberList({ members }: MemberListProps) {
     <div className="h-full bg-background">
       <div className="flex h-12 items-center border-b px-3">Thành viên</div>
       <ScrollArea className="p-1">
-        {members.map((member) => (
+        {members?.map((member) => (
           <MemberListItem key={member.id} member={member} />
         ))}
       </ScrollArea>

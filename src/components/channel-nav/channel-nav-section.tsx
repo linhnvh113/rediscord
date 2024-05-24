@@ -1,13 +1,10 @@
 "use client";
 
-import type { MouseEvent } from "react";
-
 import { MemberRole } from "@prisma/client";
 import { ChevronDown, Plus } from "lucide-react";
 
 import AppTooltip from "@/components/app-tooltip";
 import ChannelNavItem from "@/components/channel-nav/channel-nav-item";
-import { Button } from "@/components/ui/button";
 import {
   Collapsible,
   CollapsibleContent,
@@ -29,28 +26,26 @@ export default function ChannelNavSection({
 }: ChannelNavSectionProps) {
   const { onOpen } = useModalStore();
 
-  const handleClick = (e: MouseEvent) => {
-    e.stopPropagation();
-    onOpen("CHANNEL");
-  };
-
   return (
-    <Collapsible defaultOpen>
-      <CollapsibleTrigger asChild>
-        <div className="my-2 flex items-center justify-between">
-          <p className="flex flex-1 cursor-pointer select-none text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            <ChevronDown className="size-4" />
-            {label}
-          </p>
-          {role !== MemberRole.GUEST && (
-            <AppTooltip label="Create Channel" side="top">
-              <button type="button" onClick={handleClick}>
-                <Plus className="size-4" />
-              </button>
-            </AppTooltip>
-          )}
-        </div>
-      </CollapsibleTrigger>
+    <Collapsible defaultOpen className="mt-4">
+      <div className="flex items-center justify-between pr-3">
+        <CollapsibleTrigger asChild>
+          <div className="my-2 flex items-center justify-between">
+            <p className="flex flex-1 cursor-pointer select-none items-center text-xs font-semibold uppercase tracking-wider text-muted-foreground hover:text-accent-foreground">
+              <ChevronDown className="size-3" />
+              <span>{label}</span>
+            </p>
+          </div>
+        </CollapsibleTrigger>
+        {role !== MemberRole.GUEST && (
+          <AppTooltip label="Tạo kênh" side="top">
+            <button type="button" onClick={() => onOpen("CHANNEL")}>
+              <Plus className="size-4 text-muted-foreground hover:text-accent-foreground" />
+            </button>
+          </AppTooltip>
+        )}
+      </div>
+
       <CollapsibleContent className="space-y-1">
         {channels.map((channel) => (
           <ChannelNavItem key={channel.id} channel={channel} role={role} />

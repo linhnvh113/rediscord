@@ -28,15 +28,15 @@ export default async function ServerNav() {
 
   return (
     <aside className="sticky top-0 z-30 h-screen">
-      <div className="flex h-full flex-col items-center space-y-4 bg-background py-3">
+      <div className="flex h-full flex-col items-center space-y-4 border-r bg-background py-3">
         <ServerNavAction />
-        <Separator className="mx-auto h-0.5 w-10 rounded-md" />
+        <Separator className=" w-1/2 rounded-md" />
         <ScrollArea className="w-full flex-1">
           {servers.map((server) => (
             <ServerNavItem key={server.id} server={server} />
           ))}
         </ScrollArea>
-        <div className="mt-auto flex flex-col items-center gap-y-4 pb-3">
+        <div className="flex flex-col items-center gap-y-4">
           <ToggleNotification />
           <ModeToggle />
           <UserButton

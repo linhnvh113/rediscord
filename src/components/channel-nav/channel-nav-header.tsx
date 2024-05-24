@@ -41,8 +41,7 @@ export default function ChannelNavHeader({
       <DropdownMenuTrigger asChild>
         <Button
           variant="ghost"
-          size="lg"
-          className="select-none justify-between rounded-none"
+          className="h-12 select-none justify-between rounded-none border-b"
         >
           {server.name}
           <ChevronDown className="hidden sm:block" />

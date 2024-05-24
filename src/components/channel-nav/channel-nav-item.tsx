@@ -42,7 +42,7 @@ export default function ChannelNavItem({ channel, role }: ChannelNavItemProps) {
       variant="ghost"
       size="sm"
       className={cn(
-        "group w-full justify-start px-2 text-muted-foreground",
+        "group w-full justify-start text-muted-foreground",
         params?.channelId === channel.id && "bg-accent text-accent-foreground",
       )}
       onClick={handleClick}
@@ -50,16 +50,16 @@ export default function ChannelNavItem({ channel, role }: ChannelNavItemProps) {
       {CHANNEL_ICON_MAP[channel.type]}
       <span className="line-clamp-1 text-sm font-semibold">{channel.name}</span>
       {channel.name !== "general" && role !== MemberRole.GUEST && (
-        <div className="ml-auto flex items-center gap-2">
-          <AppTooltip label="Edit">
+        <div className="ml-auto flex items-center gap-2 text-muted-foreground">
+          <AppTooltip label="Sửa">
             <Edit
-              className="hidden size-4 group-hover:block"
+              className="hidden size-4 hover:text-accent-foreground group-hover:block"
               onClick={handleEditClick}
             />
           </AppTooltip>
-          <AppTooltip label="Delete">
+          <AppTooltip label="Xóa">
             <Trash
-              className="hidden size-4 group-hover:block"
+              className="hidden size-4 hover:text-accent-foreground group-hover:block"
               onClick={handleDeleteClick}
             />
           </AppTooltip>
