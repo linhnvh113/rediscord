@@ -34,15 +34,6 @@ export default async function Page({ params }: PageProps) {
     },
   });
 
-  const members = await db.member.findMany({
-    where: {
-      serverId: params.serverId,
-    },
-    include: {
-      profile: true,
-    },
-  });
-
   if (!channel || !member) {
     redirect("/");
   }
@@ -53,7 +44,6 @@ export default async function Page({ params }: PageProps) {
         type="channel"
         name={channel.name}
         serverId={params.serverId}
-        members={members}
       />
       {channel.type === "TEXT" && (
         <>

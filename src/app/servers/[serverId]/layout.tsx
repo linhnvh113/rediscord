@@ -30,13 +30,6 @@ export default async function Layout({ children, params }: LayoutProps) {
         },
       },
     },
-    include: {
-      members: {
-        include: {
-          profile: true,
-        },
-      },
-    },
   });
 
   if (!server) {
@@ -50,7 +43,7 @@ export default async function Layout({ children, params }: LayoutProps) {
       </div>
       <main className="flex-1">{children}</main>
       <div className="hidden lg:block">
-        <MemberList members={server.members} />
+        <MemberList serverId={params.serverId} />
       </div>
     </div>
   );

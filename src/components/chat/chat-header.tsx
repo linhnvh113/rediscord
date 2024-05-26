@@ -20,7 +20,6 @@ export default function ChatHeader({
   name,
   serverId,
   imageUrl,
-  members,
 }: ChatHeaderProps) {
   if (type === "channel") {
   }
@@ -34,7 +33,7 @@ export default function ChatHeader({
       <span className="text-md font-semibold">{name}</span>
       <div className="ml-auto flex items-center gap-3">
         {type === "conversation" && <ChatVideoButton />}
-        <ToggleMemberList members={members} />
+        <ToggleMemberList serverId={serverId} />
         <SocketIndicator />
       </div>
     </div>

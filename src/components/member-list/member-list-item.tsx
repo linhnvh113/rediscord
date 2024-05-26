@@ -3,17 +3,22 @@
 import { useParams, useRouter } from "next/navigation";
 
 import UserAvatar from "@/components/user-avatar";
-import type { Member } from "@/types";
+import type { ConversationParams, Member } from "@/types";
 
 interface MemberListItemProps {
   member: Member;
+  currentMember: Member;
 }
 
-export default function MemberListItem({ member }: MemberListItemProps) {
+export default function MemberListItem({
+  member,
+  currentMember,
+}: MemberListItemProps) {
   const router = useRouter();
-  const params = useParams<{ serverId: string }>();
+  const params = useParams<ConversationParams>();
 
   const onClickMember = () => {
+    if (member.id === currentMember.id) return;
     router.push(`/servers/${params?.serverId}/conversations/${member.id}`);
   };
 

@@ -45,3 +45,13 @@ export type NextApiResponseSocket = NextApiResponse & {
 };
 
 export type QueryObject = Record<string, string | string[]> | null;
+
+export type ChannelParams = {
+  serverId: string;
+  channelId: string;
+};
+
+export type ConversationParams = {
+  serverId: string;
+  memberId: string;
+};
