@@ -2,6 +2,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
 import { Inter as FontSans } from "next/font/google";
 
+import { ActiveProvider } from "@/components/providers/active-provider";
 import { ModalProvider } from "@/components/providers/modal-provider";
 import { QueryProvider } from "@/components/providers/query-provider";
 import { SocketProvider } from "@/components/providers/socket-provider";
@@ -70,6 +71,7 @@ export default function RootLayout({
           >
             <QueryProvider>
               <SocketProvider>{children}</SocketProvider>
+              <ActiveProvider />
               <ModalProvider />
             </QueryProvider>
           </ThemeProvider>
