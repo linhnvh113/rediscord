@@ -4,7 +4,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ChannelType } from "@prisma/client";
 import { useParams, useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 
 import {
   Form,
@@ -25,25 +24,18 @@ import {
 import { FORM_NAME } from "@/constants";
 import { useModalStore } from "@/hooks/use-modal-store";
 import {
+  createChannelSchema,
+  type CreateChannelDto,
+} from "@/schemas/channel.schema";
+import {
   useCreateChannel,
   useUpdateChannel,
 } from "@/services/queries/channel.query";
 
-const formSchema = z.object({
-  name: z
-    .string()
-    .min(1, "Hãy đặt tên kênh")
-    .refine((name) => name !== "general", {
-      message: "Tên kênh không thể là 'general'",
-    }),
-  type: z.nativeEnum(ChannelType),
-});
-
-type FormSchema = z.infer<typeof formSchema>;
-
-const defaultValues: FormSchema = {
+const defaultValues: CreateChannelDto = {
   name: "",
-  type: "TEXT",
+  type: ChannelType.TEXT,
+  serverId: "",
 };
 
 export default function ChannelForm() {
@@ -52,9 +44,9 @@ export default function ChannelForm() {
 
   const { data, onClose } = useModalStore();
 
-  const form = useForm<FormSchema>({
+  const form = useForm<CreateChannelDto>({
     defaultValues: data.channel ?? defaultValues,
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(createChannelSchema),
   });
 
   const { mutate: createChannel } = useCreateChannel();
@@ -62,10 +54,10 @@ export default function ChannelForm() {
 
   const isLoading = form.formState.isSubmitting;
 
-  const onSubmit = async (body: FormSchema) => {
+  const onSubmit = async (body: CreateChannelDto) => {
     if (data.channel) {
       updateChannel(
-        { id: data.channel.id, ...body, serverId: data.channel.serverId },
+        { id: data.channel.id, ...body },
         {
           onSuccess: () => {
             form.reset();

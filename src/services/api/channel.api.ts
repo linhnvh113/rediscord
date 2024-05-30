@@ -1,29 +1,22 @@
-import type { ChannelType } from "@prisma/client";
-
-export type CreateChannelBody = {
-  name: string;
-  type: ChannelType;
-  serverId: string;
-};
-
-export type UpdateChannelBody = {
-  id: string;
-} & Partial<CreateChannelBody>;
+import type {
+  CreateChannelDto,
+  UpdateChannelDto,
+} from "@/schemas/channel.schema";
 
 export const channelApi = {
-  create: async (body: CreateChannelBody) => {
+  create: async (createChannelDto: CreateChannelDto) => {
     const res = await fetch("/api/channels", {
       method: "POST",
-      body: JSON.stringify(body),
+      body: JSON.stringify(createChannelDto),
     });
 
     return res.json();
   },
 
-  update: async (body: UpdateChannelBody) => {
-    const res = await fetch(`/api/channels/${body.id}`, {
+  update: async (updateChannelDto: UpdateChannelDto) => {
+    const res = await fetch(`/api/channels/${updateChannelDto.id}`, {
       method: "PATCH",
-      body: JSON.stringify(body),
+      body: JSON.stringify(updateChannelDto),
     });
 
     return res.json();

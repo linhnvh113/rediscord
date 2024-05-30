@@ -2,34 +2,51 @@ import { NextResponse } from "next/server";
 
 import { currentProfile } from "@/lib/current-profile";
 import { db } from "@/lib/db";
+import { updateServerSchema } from "@/schemas/server.schema";
 
 export async function PATCH(
   req: Request,
   { params }: { params: { serverId: string } },
 ) {
   try {
-    /* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */
-    const { name, imageUrl } = await req.json();
-
     const profile = await currentProfile();
     if (!profile) {
-      return new NextResponse("Unauthorized", { status: 401 });
+      return NextResponse.json(
+        { status: "fail", message: "Unauthorized" },
+        { status: 401 },
+      );
     }
 
-    const server = await db.server.update({
-      data: {
-        name: name as string,
-        imageUrl: imageUrl as string,
-      },
-      where: {
-        id: params.serverId,
-      },
-    });
+    /* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */
+    const data = await req.json();
+    const dataParsed = updateServerSchema.safeParse(data);
 
-    return NextResponse.json(server, { status: 200 });
+    if (dataParsed.success) {
+      const server = await db.server.update({
+        data: {
+          name: dataParsed.data.name,
+          imageUrl: dataParsed.data.imageUrl,
+        },
+        where: {
+          id: params.serverId,
+        },
+      });
+
+      return NextResponse.json(
+        { status: "success", message: "OK", data: server },
+        { status: 200 },
+      );
+    } else {
+      return NextResponse.json(
+        { status: "fail", message: "Invalid data" },
+        { status: 400 },
+      );
+    }
   } catch (error) {
-    console.log("[PATCH] /server/:serverId", error);
-    return new NextResponse("Internal server", { status: 500 });
+    return NextResponse.json(
+      { status: "error", message: "Internal server" },
+      { status: 500 },
+    );
   }
 }
 

@@ -10,15 +10,11 @@ export async function PATCH(
 ) {
   try {
     /* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */
-    const { name, type, serverId } = await req.json();
+    const { name, type } = await req.json();
 
     const profile = await currentProfile();
     if (!profile) {
       return new NextResponse("Unauthorized", { status: 401 });
-    }
-
-    if (!serverId) {
-      return new NextResponse("Server ID is missing", { status: 400 });
     }
 
     const channel = await db.channel.update({
@@ -28,7 +24,6 @@ export async function PATCH(
       },
       where: {
         id: params.channelId,
-        serverId,
       },
     });
 

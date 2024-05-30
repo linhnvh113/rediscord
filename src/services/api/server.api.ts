@@ -1,26 +1,19 @@
-export type CreateServerBody = {
-  name: string;
-  imageUrl: string;
-};
-
-export type UpdateServerBody = {
-  id: string;
-} & Partial<CreateServerBody>;
+import type { CreateServerDto, UpdateServerDto } from "@/schemas/server.schema";
 
 export const serverApi = {
-  create: async (body: CreateServerBody) => {
+  create: async (createServerDto: CreateServerDto) => {
     const res = await fetch("/api/servers", {
       method: "POST",
-      body: JSON.stringify(body),
+      body: JSON.stringify(createServerDto),
     });
 
     return res.json();
   },
 
-  update: async (body: UpdateServerBody) => {
-    const res = await fetch(`/api/servers/${body.id}`, {
+  update: async (updateServerDto: UpdateServerDto) => {
+    const res = await fetch(`/api/servers/${updateServerDto.id}`, {
       method: "PATCH",
-      body: JSON.stringify(body),
+      body: JSON.stringify(updateServerDto),
     });
 
     return res.json();

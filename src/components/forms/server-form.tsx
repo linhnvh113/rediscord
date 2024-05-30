@@ -3,7 +3,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 
 import FileUpload from "@/components/file-upload";
 import {
@@ -15,21 +14,18 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { FORM_NAME } from '@/constants';
+import { FORM_NAME } from "@/constants";
 import { useModalStore } from "@/hooks/use-modal-store";
+import {
+  createServerSchema,
+  type CreateServerDto,
+} from "@/schemas/server.schema";
 import {
   useCreateServer,
   useUpdateServer,
 } from "@/services/queries/server.query";
 
-const formSchema = z.object({
-  name: z.string().min(1, "Hãy đặt tên máy chủ"),
-  imageUrl: z.string().min(1, "Hãy đặt biểu tượng máy chủ"),
-});
-
-type FormSchema = z.infer<typeof formSchema>;
-
-const defaultValues: FormSchema = {
+const defaultValues: CreateServerDto = {
   name: "",
   imageUrl: "",
 };
@@ -39,9 +35,9 @@ export default function ServerForm() {
 
   const { data, onClose } = useModalStore();
 
-  const form = useForm<FormSchema>({
+  const form = useForm<CreateServerDto>({
     defaultValues: data.server ?? defaultValues,
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(createServerSchema),
   });
 
   const { mutate: mutateCreateServer } = useCreateServer();
@@ -49,7 +45,7 @@ export default function ServerForm() {
 
   const isLoading = form.formState.isSubmitting;
 
-  const onSubmit = async (body: FormSchema) => {
+  const onSubmit = async (body: CreateServerDto) => {
     if (data.server) {
       mutateUpdateServer(
         { id: data.server.id, ...body },
@@ -84,7 +80,7 @@ export default function ServerForm() {
           control={form.control}
           name="imageUrl"
           render={({ field }) => (
-            <FormItem className="flex justify-center">
+            <FormItem className="">
               <FormControl>
                 <FileUpload
                   value={field.value}
@@ -92,6 +88,7 @@ export default function ServerForm() {
                   onChange={field.onChange}
                 />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />

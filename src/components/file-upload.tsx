@@ -21,12 +21,12 @@ export default function FileUpload({
 
   if (value && fileType !== "pdf") {
     return (
-      <div className="relative size-20">
-        <Image src={value} fill alt="Upload" className="rounded-full" />
+      <div className="relative mx-auto size-20">
+        <Image src={value} fill alt="Upload" className="mx-auto rounded-full" />
         <button
           type="button"
           onClick={() => onChange("")}
-          className="absolute right-0 top-0 rounded-full bg-destructive p-1 text-destructive-foreground shadow-sm"
+          className="absolute right-0 top-0 rounded-full bg-destructive p-1 text-destructive-foreground"
         >
           <X className="size-4" />
         </button>
@@ -36,7 +36,7 @@ export default function FileUpload({
 
   if (value && fileType === "pdf") {
     return (
-      <div className="relative mt-2 flex items-center rounded-md bg-background/10 p-2">
+      <div className="relative mt-2 flex items-center rounded-md bg-accent p-2">
         <FileIcon className="h-10 w-10 fill-indigo-200 stroke-indigo-400" />
         <Link
           href={value}

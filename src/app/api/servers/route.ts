@@ -1,42 +1,57 @@
 import { MemberRole } from "@prisma/client";
-import { NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 
 import { currentProfile } from "@/lib/current-profile";
 import { db } from "@/lib/db";
+import { createServerSchema } from "@/schemas/server.schema";
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
-    /* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */
-    const { name, imageUrl } = await req.json();
-
     const profile = await currentProfile();
     if (!profile) {
-      return new NextResponse("Unauthorized", { status: 401 });
+      return NextResponse.json({ message: "Unauthorized" });
     }
 
-    const server = await db.server.create({
-      data: {
-        profileId: profile.id,
-        name: name as string,
-        imageUrl: imageUrl as string,
-        channels: {
-          create: {
-            name: "general",
-            profileId: profile.id,
-          },
-        },
-        members: {
-          create: {
-            profileId: profile.id,
-            role: MemberRole.ADMIN,
-          },
-        },
-      },
-    });
+    /* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */
+    const data = await req.json();
+    const dataParsed = createServerSchema.safeParse(data);
 
-    return NextResponse.json(server, { status: 201 });
+    if (dataParsed.success) {
+      const server = await db.server.create({
+        data: {
+          ...dataParsed.data,
+          profileId: profile.id,
+          channels: {
+            create: {
+              name: "general",
+              profileId: profile.id,
+            },
+          },
+          members: {
+            create: {
+              profileId: profile.id,
+              role: MemberRole.ADMIN,
+            },
+          },
+        },
+      });
+
+      return NextResponse.json({
+        status: "success",
+        message: "Created",
+        data: server,
+      });
+    } else {
+      return NextResponse.json({
+        status: "fail",
+        message: "Invalid data",
+        error: dataParsed.error,
+      });
+    }
   } catch (error) {
-    console.log("[POST] /server", error);
-    return new NextResponse("Internal server", { status: 500 });
+    return NextResponse.json(
+      { status: "error", message: "Internal server", error },
+      { status: 500 },
+    );
   }
 }
