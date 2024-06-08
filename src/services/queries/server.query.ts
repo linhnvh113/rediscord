@@ -25,3 +25,9 @@ export const useGenerateInviteCode = () => {
     mutationFn: serverApi.generateInviteCode,
   });
 };
+
+export const useLeaveServer = () => {
+  return useMutation({
+    mutationFn: serverApi.leaveServer,
+  });
+};

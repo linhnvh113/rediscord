@@ -41,4 +41,12 @@ export const serverApi = {
 
     return res.json();
   },
+
+  leaveServer: async (serverId: string) => {
+    const res = await fetch(`/api/servers/${serverId}/leave`, {
+      method: "PATCH",
+    });
+
+    return res.json();
+  },
 };
