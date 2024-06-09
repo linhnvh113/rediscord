@@ -23,7 +23,11 @@ export default function EmojiPicker({ onChange }: EmojiPickerProps) {
       <PopoverTrigger asChild>
         <Smile />
       </PopoverTrigger>
-      <PopoverContent asChild side="top" align="end">
+      <PopoverContent
+        side="top"
+        align="center"
+        className="w-full border-none bg-transparent shadow-none drop-shadow-none"
+      >
         <Picker
           theme={resolvedTheme}
           data={data}
