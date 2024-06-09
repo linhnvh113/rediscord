@@ -2,7 +2,7 @@
 
 import { Fragment, useRef, type ElementRef, useEffect } from "react";
 
-import { Loader2 } from "lucide-react";
+import { Loader2, ServerCrash } from "lucide-react";
 
 import ChatItem from "@/components/chat/chat-item";
 import ChatWelcome from "@/components/chat/chat-welcome";
@@ -11,7 +11,7 @@ import { useChatQuery } from "@/hooks/use-chat-query";
 import { useChatScroll } from "@/hooks/use-chat-scroll";
 import { useChatSocket } from "@/hooks/use-chat-socket";
 import { registerServiceWorker } from "@/lib/serviceWorker";
-import type { Member, Message } from "@/types";
+import type { Group, Member, Message } from "@/types";
 
 interface ChatMessagesProps {
   type: "channel" | "conversation";
@@ -37,13 +37,19 @@ export default function ChatMessages({
   const addKey = `chat:${paramValue}:messages`;
   const updateKey = `chat:${paramValue}:messages:update`;
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
-    useChatQuery({
-      queryKey,
-      apiUrl,
-      paramKey,
-      paramValue,
-    });
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isLoading,
+    isError,
+  } = useChatQuery({
+    queryKey,
+    apiUrl,
+    paramKey,
+    paramValue,
+  });
 
   useEffect(() => {
     async function setUpServiceWorker() {
@@ -67,9 +73,18 @@ export default function ChatMessages({
 
   if (isLoading) {
     return (
-      <div className="flex flex-1 flex-col items-center justify-center">
+      <div className="flex flex-1 flex-col items-center justify-center text-muted-foreground">
         <Loader2 className="my-4 size-7 animate-spin" />
         <p className="text-xs">Loading messages...</p>
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="flex flex-1 flex-col items-center justify-center text-muted-foreground">
+        <ServerCrash className="my-4 size-7" />
+        <p className="text-xs">Something went wrong!</p>
       </div>
     );
   }
@@ -83,14 +98,18 @@ export default function ChatMessages({
           {isFetchingNextPage ? (
             <Loader2 className="my-4 size-6 animate-spin" />
           ) : (
-            <Button variant="link" onClick={() => fetchNextPage()}>
+            <Button
+              variant="link"
+              onClick={() => fetchNextPage()}
+              className="italic text-muted-foreground"
+            >
               Load previous messages
             </Button>
           )}
         </div>
       )}
       <div className="mt-auto flex flex-col-reverse">
-        {data?.pages.map((group, i) => (
+        {data?.pages.map((group: Group, i) => (
           <Fragment key={i}>
             {group.items.map((message: Message) => (
               <ChatItem

@@ -71,13 +71,11 @@ export async function GET(req: Request) {
       nextCursor = messages[MESSAGES_BATCH - 1].id;
     }
 
-    return NextResponse.json(
-      {
-        items: messages,
-        nextCursor,
-      },
-      { status: 200 },
-    );
+    return NextResponse.json({
+      items: messages,
+      nextCursor,
+    });
+    // group
   } catch (error) {
     console.log("[GET] /messages");
     return new NextResponse("Internal Server", {

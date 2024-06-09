@@ -1,4 +1,5 @@
 import { ClerkProvider } from "@clerk/nextjs";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import type { Metadata } from "next";
 import { Inter as FontSans } from "next/font/google";
 
@@ -73,6 +74,7 @@ export default function RootLayout({
               <SocketProvider>{children}</SocketProvider>
               <ActiveProvider />
               <ModalProvider />
+              {/* <ReactQueryDevtools /> */}
             </QueryProvider>
           </ThemeProvider>
         </body>

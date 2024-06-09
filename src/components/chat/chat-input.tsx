@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import EmojiPicker from "@/components/emoji-picker";
+import { PlayMessageSound } from "@/components/PlaySound";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useModalStore } from "@/hooks/use-modal-store";
@@ -46,10 +47,7 @@ export default function ChatInput({ type, name, query }: ChatInputProps) {
     if (type === "channel") {
       createMessages(body, {
         onSuccess: () => {
-          // const audio = new Audio(
-          //   "https://res.cloudinary.com/dad0fircy/video/upload/v1695812375/discord-clone/message_crbv6k.mp3",
-          // );
-          // audio.play();
+          // PlayMessageSound();
           form.reset();
         },
       });
@@ -57,7 +55,8 @@ export default function ChatInput({ type, name, query }: ChatInputProps) {
         method: "POST",
         body: JSON.stringify({
           serverId: params?.serverId,
-          title: "Bạn có tin nhắn mới.",
+          channelId: params?.channelId,
+          body: body.content,
         }),
       });
     } else {

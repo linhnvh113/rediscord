@@ -55,3 +55,8 @@ export type ConversationParams = {
   serverId: string;
   memberId: string;
 };
+
+export type Group = {
+  items: Message[];
+  nextCursor: string;
+};

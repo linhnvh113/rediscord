@@ -10,7 +10,7 @@ const sw = /** @type {ServiceWorkerGlobalScope & typeof globalThis} */ (
 
 sw.addEventListener("push", (event) => {
   const message = event.data?.json();
-  const { title, body, icon, image, channelId } = message;
+  const { title, body, icon, data } = message;
 
   console.log("Received push message", message);
 
@@ -26,8 +26,35 @@ sw.addEventListener("push", (event) => {
       }
     }
 
-    await sw.registration.showNotification(title);
+    await sw.registration.showNotification(title, {
+      body,
+      icon,
+      data,
+    });
   }
 
   event.waitUntil(handlePushEvent());
+});
+
+sw.addEventListener("notificationclick", (event) => {
+  const notification = event.notification;
+  notification.close();
+
+  async function handleNotificationClick() {
+    const windowClients = await sw.clients.matchAll({
+      type: "window",
+      includeUncontrolled: true,
+    });
+
+    const { serverId, channelId } = notification.data;
+
+    if (windowClients.length > 0) {
+      await windowClients[0].focus();
+      // windowClients[0].postMessage({ channelId });
+    } else {
+      sw.clients.openWindow(`/servers/${serverId}/channels/${channelId}`);
+    }
+  }
+
+  event.waitUntil(handleNotificationClick());
 });

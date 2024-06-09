@@ -8,7 +8,7 @@ import webPush, { WebPushError } from "web-push";
 
 export async function POST(req: Request) {
   try {
-    const { serverId, title } = await req.json();
+    const { serverId, channelId, body } = await req.json();
 
     const profile = await currentProfile();
     if (!profile) {
@@ -26,9 +26,17 @@ export async function POST(req: Request) {
       },
     });
 
+    const channel = await db.channel.findUnique({
+      where: {
+        id: channelId,
+      },
+    });
+
     const recipientIds = server!.members
       .map((member) => member.profile.userId)
-      .filter((id) => id !== profile.id);
+      .filter((id) => id !== profile.userId);
+
+    console.log(recipientIds);
 
     const recipients = await clerkClient.users.getUserList({
       userId: recipientIds,
@@ -42,11 +50,17 @@ export async function POST(req: Request) {
             .sendNotification(
               subscription,
               JSON.stringify({
-                title,
+                title: `${profile.name} (${server?.name} - #${channel?.name})`,
+                body,
+                icon: profile.imageUrl,
+                data: {
+                  serverId,
+                  channelId,
+                },
               }),
               {
                 vapidDetails: {
-                  subject: "mailto:florian@flowchat.com",
+                  subject: "mailto:linhnguyen11032002@gmail.com",
                   publicKey: process.env.NEXT_PUBLIC_WEB_PUSH_PUBLIC_KEY!,
                   privateKey: process.env.NEXT_PUBLIC_WEB_PUSH_PRIVATE_KEY!,
                 },

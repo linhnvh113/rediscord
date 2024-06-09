@@ -1,5 +1,4 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { useParams } from "next/navigation";
 import qs from "query-string";
 
 import { useSocket } from "@/components/providers/socket-provider";
@@ -18,7 +17,6 @@ export const useChatQuery = ({
   paramValue,
 }: ChatQueryProps) => {
   const { isConnected } = useSocket();
-  const params = useParams();
 
   const fetchMessages = async ({ pageParam }: { pageParam?: string }) => {
     const url = qs.stringifyUrl(
