@@ -28,6 +28,13 @@ export async function PATCH(
         id: params.serverId,
         profileId: profile.id,
       },
+      include: {
+        members: {
+          include: {
+            profile: true,
+          },
+        },
+      },
     });
 
     return NextResponse.json(server, { status: 200 });
