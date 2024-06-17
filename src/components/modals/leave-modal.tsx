@@ -1,5 +1,7 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -14,6 +16,8 @@ import { useModalStore } from "@/hooks/use-modal-store";
 import { useLeaveServer } from "@/services/queries/server.query";
 
 export default function LeaveModal() {
+  const router = useRouter();
+
   const { type, data, isOpen, onClose } = useModalStore();
 
   const isModalOpen = isOpen && type === "LEAVE";
@@ -32,7 +36,11 @@ export default function LeaveModal() {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Hủy bỏ</AlertDialogCancel>
-          <AlertDialogAction onClick={() => mutate(data.server!.id)}>
+          <AlertDialogAction
+            onClick={() =>
+              mutate(data.server!.id, { onSuccess: () => router.refresh() })
+            }
+          >
             Rời phòng
           </AlertDialogAction>
         </AlertDialogFooter>

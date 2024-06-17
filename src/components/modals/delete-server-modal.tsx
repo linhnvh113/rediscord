@@ -1,5 +1,7 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -14,6 +16,8 @@ import { useModalStore } from "@/hooks/use-modal-store";
 import { useDeleteServer } from "@/services/queries/server.query";
 
 export default function DeleteServerModal() {
+  const router = useRouter();
+
   const { type, data, isOpen, onClose } = useModalStore();
 
   const isModalOpen = isOpen && type === "DELETE_SERVER";
@@ -32,7 +36,13 @@ export default function DeleteServerModal() {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Hủy bỏ</AlertDialogCancel>
-          <AlertDialogAction onClick={() => mutate(data.server!.id)}>
+          <AlertDialogAction
+            onClick={() =>
+              mutate(data.server!.id, {
+                onSuccess: () => router.refresh(),
+              })
+            }
+          >
             Xóa máy chủ
           </AlertDialogAction>
         </AlertDialogFooter>
