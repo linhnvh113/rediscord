@@ -1,5 +1,7 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -14,6 +16,8 @@ import { useModalStore } from "@/hooks/use-modal-store";
 import { useDeleteChannel } from "@/services/queries/channel.query";
 
 export default function DeleteChannelModal() {
+  const router = useRouter();
+
   const { type, data, isOpen, onClose } = useModalStore();
 
   const isModalOpen = isOpen && type === "DELETE_CHANNEL";
@@ -32,7 +36,15 @@ export default function DeleteChannelModal() {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Hủy bỏ</AlertDialogCancel>
-          <AlertDialogAction onClick={() => mutate(data.channel!.id)}>
+          <AlertDialogAction
+            onClick={() =>
+              mutate(data.channel!.id, {
+                onSuccess: () => {
+                  router.refresh();
+                },
+              })
+            }
+          >
             Xóa kênh
           </AlertDialogAction>
         </AlertDialogFooter>
