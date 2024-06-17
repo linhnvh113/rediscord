@@ -38,6 +38,10 @@ export async function POST(req: Request) {
 
     console.log(recipientIds);
 
+    if (!recipientIds.length) {
+      return NextResponse.json({ message: "no recipients" });
+    }
+
     const recipients = await clerkClient.users.getUserList({
       userId: recipientIds,
     });
